@@ -1,38 +1,58 @@
-import * as React from "react"
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-} from "@chakra-ui/react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
-import { Logo } from "./Logo"
+import * as React from "react";
+import { ChakraProvider, Text, VStack, theme, Image, Button, Link } from "@chakra-ui/react";
+import LOGO from "./assets/logo.png";
+import ICON from "./assets/icon.png";
+import { WarningTwoIcon } from "@chakra-ui/icons";
+import { Background } from "./components/Background";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
-    <Box textAlign="center" fontSize="xl">
-      <Grid minH="100vh" p={3}>
-        <ColorModeSwitcher justifySelf="flex-end" />
-        <VStack spacing={8}>
-          <Logo h="40vmin" pointerEvents="none" />
-          <Text>
-            Edit <Code fontSize="xl">src/App.tsx</Code> and save to reload.
+    <Background />
+    <VStack minH="100vh" spacing={8} justifyContent={"center"}>
+      <Image h="40vmin" pointerEvents="none" src={LOGO} />
+      <Text fontWeight={"semibold"} fontSize={"xx-large"}>
+        <Text color={"purple.500"} as={"span"}>
+          True Multi-Chain
+        </Text>{" "}
+        RPC
+      </Text>
+      {"quantum" in window ? (
+        <Button
+          variant={"outline"}
+          colorScheme={"purple"}
+          leftIcon={<Image src={ICON} height={"24px"} />}
+          paddingLeft={"8px"}
+        >
+          Connect Quantum
+        </Button>
+      ) : (
+        <VStack spacing={4}>
+          <Text fontWeight={"semibold"}>
+            <WarningTwoIcon /> Quantum Wallet is not detected!
           </Text>
-          <Link
-            color="teal.500"
-            href="https://chakra-ui.com"
-            fontSize="2xl"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Text>
+            The interactive features in this documentation require installing the Quantum wallet
+            extension.
+          </Text>
+          <Button
+            as={Link}
+            variant={"outline"}
+            colorScheme={"purple"}
+            leftIcon={<Image src={ICON} height={"24px"} />}
+            paddingLeft={"8px"}
+            isExternal={true}
+            textDecoration={"none"}
+            _hover={{
+              textDecoration: "none",
+            }}
+            href={
+              "https://chrome.google.com/webstore/detail/quantum/ajopcimklncnhjednieoejhkffdolemp"
+            }
           >
-            Learn Chakra
-          </Link>
+            Install Quantum
+          </Button>
         </VStack>
-      </Grid>
-    </Box>
+      )}
+    </VStack>
   </ChakraProvider>
-)
+);
