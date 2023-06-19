@@ -1,4 +1,11 @@
-export const MENU = [
+import { MenuId } from "../types/MenuId";
+
+export const MENU: {
+  id: MenuId;
+  title: string;
+  path: string;
+  description: string;
+}[] = [
   {
     id: "multi-chain-api",
     title: "Multi-Chain API",

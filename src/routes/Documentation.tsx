@@ -1,16 +1,75 @@
-import { LinkIcon } from "@chakra-ui/icons";
-import { Box, Button, Container, Divider, Heading, HStack, Text, VStack } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Box, Container, Divider, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import { FunctionComponent, useEffect, useMemo, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
-import specs from "../assets/json/specs.json";
+import { DocumentationSection } from "../components/DocumentationSection";
 import { Navigation } from "../components/Navigation";
 import { MENU } from "../constants/MENU";
-
-const { info } = specs;
+import { useParsedSpecs } from "../hooks/useParsedSpecs";
+import { useSpecsInfo } from "../hooks/useSpecsInfo";
+import { MenuId } from "../types/MenuId";
 
 export const Documentation: FunctionComponent = () => {
-  const location = useLocation();
+  const { hash } = useLocation();
+  const scrolledRef = useRef(false);
+  const hashRef = useRef(hash);
+  const info = useSpecsInfo();
+  const specs = useParsedSpecs();
+
+  const methods = useMemo<{
+    [Id in MenuId]: any[];
+  }>(
+    () => ({
+      "multi-chain-api":
+        specs.value?.methods
+          .filter(method =>
+            method.tags.some(
+              (tag: any) => tag.name === specs.value?.components.tags["Multi-Chain"].name,
+            ),
+          )
+          .map(method => ({
+            ...method,
+            id: `multi-chain-api/${method.name}`,
+          })) ?? [],
+      "standard-api":
+        specs.value?.methods
+          .filter(method =>
+            method.tags.some(
+              (tag: any) => tag.name === specs.value?.components.tags["Standard"].name,
+            ),
+          )
+          .map(method => ({
+            ...method,
+            id: `standard-api/${method.name}`,
+          })) ?? [],
+    }),
+    [specs],
+  );
+
+  useEffect(() => {
+    if (specs.value && hash) {
+      // We want to reset if the hash has changed
+      if (hashRef.current !== hash) {
+        hashRef.current = hash;
+        scrolledRef.current = false;
+      }
+
+      // only attempt to scroll if we haven't yet (this could have just reset above if hash changed)
+      if (!scrolledRef.current) {
+        const id = hash.replace("#", "");
+        const element = document.getElementById(id);
+        if (element) {
+          const timer = setTimeout(() => {
+            element.scrollIntoView({ behavior: "smooth" });
+            scrolledRef.current = true;
+          }, 100);
+          return () => {
+            clearTimeout(timer);
+          };
+        }
+      }
+    }
+  }, [hash, specs.value]);
 
   return (
     <Box position={"relative"} minHeight={"100vh"}>
@@ -33,35 +92,14 @@ export const Documentation: FunctionComponent = () => {
           <Divider />
           <VStack spacing={12} marginTop={8}>
             {MENU.map(({ id, title, path, description }) => (
-              <VStack id={id} key={id} alignItems={"stretch"}>
-                <Box>
-                  <Button
-                    colorScheme={"primary"}
-                    variant={"ghost"}
-                    as={NavLink}
-                    to={path}
-                    rightIcon={<LinkIcon opacity={0} transition={"opacity 0.2s"} />}
-                    _hover={{
-                      ".chakra-button__icon > svg": {
-                        opacity: 1,
-                      },
-                    }}
-                    css={{
-                      "&.active-hash .chakra-button__icon > svg": {
-                        opacity: 1,
-                      },
-                    }}
-                    className={location.hash === `#${id}` ? "active-hash" : ""}
-                  >
-                    <Heading as="h2" fontSize="xl">
-                      {title}
-                    </Heading>
-                  </Button>
-                </Box>
-                <Box paddingX={4}>
-                  <Text>{description}</Text>
-                </Box>
-              </VStack>
+              <DocumentationSection
+                id={id}
+                key={id}
+                title={title}
+                path={path}
+                description={description}
+                methods={methods[id] ?? []}
+              />
             ))}
           </VStack>
         </VStack>

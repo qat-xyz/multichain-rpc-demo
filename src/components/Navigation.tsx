@@ -65,7 +65,7 @@ export const Navigation: FunctionComponent = () => {
                 variant={"ghost"}
                 colorScheme={"primary"}
                 to={path}
-                isActive={location.hash === `#${id}`}
+                isActive={location.hash.startsWith(`#${id}`)}
               >
                 {title}
               </Button>
@@ -92,7 +92,7 @@ export const Navigation: FunctionComponent = () => {
                     key={id}
                     as={NavLink}
                     to={path}
-                    icon={<LinkIcon opacity={location.hash === `#${id}` ? 1 : 0} />}
+                    icon={<LinkIcon opacity={location.hash.startsWith(`#${id}`) ? 1 : 0} />}
                   >
                     {title}
                   </MenuItem>
