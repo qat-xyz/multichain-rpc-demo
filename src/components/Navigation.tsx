@@ -38,14 +38,14 @@ export const Navigation: FunctionComponent = () => {
                 whiteSpace={"nowrap"}
                 noOfLines={1}
                 textOverflow={"clip"}
+                fontWeight={"semibold"}
                 display={{
                   base: "none",
                   md: "block",
                 }}
               >
-                True{" "}
                 <Text color={"purple.500"} as={"span"}>
-                  Multichain
+                  True Multichain
                 </Text>{" "}
                 RPC API
               </Text>
