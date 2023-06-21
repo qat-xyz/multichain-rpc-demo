@@ -5,22 +5,28 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
-  Code,
+  Divider,
   HStack,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
+import ReactJson from "react-json-view";
+import ReactMarkdown from "react-markdown";
 import { NavLink, useLocation } from "react-router-dom";
+import remarkGfm from "remark-gfm";
 
 export const DocumentationMethod: FunctionComponent<{
   id: string;
   name: string;
   description?: string;
-}> = ({ id, name, description }) => {
+  summary?: string;
+  params?: any;
+  result?: any;
+}> = ({ id, name, summary, description, params, result }) => {
   const location = useLocation();
   return (
-    <AccordionItem>
+    <AccordionItem _expanded={{}}>
       <AccordionButton
         as={NavLink}
         to={`#${id}`}
@@ -34,18 +40,78 @@ export const DocumentationMethod: FunctionComponent<{
             opacity: 1,
           },
         }}
+        _expanded={{
+          backgroundColor: "gray.100",
+        }}
       >
         <Box id={id} position={"absolute"} top={"-90px"} />
         <HStack flex={1} marginY={2}>
-          <Code as={"h3"} fontSize={"lg"}>
+          <Text as={"h3"} fontSize={"lg"} fontWeight={"semibold"}>
             {name}
-          </Code>
+          </Text>
           <LinkIcon opacity={0} transition={"opacity 0.2s"} />
         </HStack>
         <AccordionIcon />
       </AccordionButton>
-      <AccordionPanel paddingBottom={4}>
-        <VStack alignItems={"stretch"}>{description && <Text>{description}</Text>}</VStack>
+      <AccordionPanel padding={6} borderX={"1px solid"} borderColor={"gray.200"}>
+        <VStack alignItems={"stretch"} spacing={4} divider={<Divider />}>
+          <VStack alignItems={"stretch"}>
+            {summary && (
+              <ReactMarkdown
+                className={"markdown"}
+                remarkPlugins={[remarkGfm]}
+                linkTarget={"_blank"}
+              >
+                {summary}
+              </ReactMarkdown>
+            )}
+            {description && (
+              <ReactMarkdown
+                className={"markdown"}
+                remarkPlugins={[remarkGfm]}
+                linkTarget={"_blank"}
+              >
+                {description}
+              </ReactMarkdown>
+            )}
+          </VStack>
+          {params?.length && (
+            <VStack alignItems={"stretch"} textAlign={"left"}>
+              <Text fontWeight={"semibold"}>Params</Text>
+              {params.map((param: any) => {
+                const { name, ...rest } = param;
+                return (
+                  <ReactJson
+                    key={name}
+                    name={name}
+                    collapsed={true}
+                    displayDataTypes={false}
+                    displayObjectSize={false}
+                    enableClipboard={false}
+                    src={rest}
+                  />
+                );
+              })}
+            </VStack>
+          )}
+          {result &&
+            [result].map(data => {
+              const { name, ...rest } = data;
+              return (
+                <VStack alignItems={"stretch"} textAlign={"left"}>
+                  <Text fontWeight={"semibold"}>Result</Text>
+                  <ReactJson
+                    name={name}
+                    collapsed={true}
+                    displayDataTypes={false}
+                    displayObjectSize={false}
+                    enableClipboard={false}
+                    src={rest}
+                  />
+                </VStack>
+              );
+            })}
+        </VStack>
       </AccordionPanel>
     </AccordionItem>
   );

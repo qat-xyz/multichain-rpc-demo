@@ -43,14 +43,20 @@ export const DocumentationSection: FunctionComponent<{
       <VStack alignItems={"stretch"} paddingX={4} spacing={8}>
         <Text>{description}</Text>
         <Accordion index={[methods.findIndex((method: any) => location.hash === `#${method.id}`)]}>
-          {methods.map(method => (
-            <DocumentationMethod
-              id={method.id}
-              key={method.id}
-              name={method.name}
-              description={method.description}
-            />
-          ))}
+          {methods.map(method => {
+            console.log(method);
+            return (
+              <DocumentationMethod
+                id={method.id}
+                key={method.id}
+                name={method.name}
+                description={method.description}
+                summary={method.summary}
+                params={method.params}
+                result={method.result}
+              />
+            );
+          })}
         </Accordion>
       </VStack>
     </VStack>
