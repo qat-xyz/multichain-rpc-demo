@@ -45,7 +45,7 @@ export const Navigation: FunctionComponent = () => {
               >
                 True{" "}
                 <Text color={"purple.500"} as={"span"}>
-                  Multi-Chain
+                  Multichain
                 </Text>{" "}
                 RPC API
               </Text>

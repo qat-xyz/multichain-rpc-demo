@@ -7,11 +7,11 @@ export const MENU: {
   description: string;
 }[] = [
   {
-    id: "multi-chain-api",
-    title: "Multi-Chain API",
-    path: "/documentation#multi-chain-api",
+    id: "multichain-api",
+    title: "Multichain API",
+    path: "/documentation#multichain-api",
     description:
-      "The Multi-Chain methods constitute a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multi-chain user experience.",
+      "The Multichain methods constitute a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multi-chain user experience.",
   },
   {
     id: "standard-api",

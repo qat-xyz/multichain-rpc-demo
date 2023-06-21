@@ -13,7 +13,7 @@ export const Home: FunctionComponent = () => {
       <Image h="40vmin" pointerEvents="none" src={LOGO} />
       <Text fontWeight={"semibold"} fontSize={"xx-large"}>
         <Text color={"purple.500"} as={"span"} whiteSpace={"nowrap"}>
-          True Multi-Chain
+          True Multichain
         </Text>{" "}
         <Text as={"span"} whiteSpace={"nowrap"}>
           RPC API

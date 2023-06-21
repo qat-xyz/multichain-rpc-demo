@@ -1,1 +1,1 @@
-export type MenuId = "multi-chain-api" | "standard-api";
+export type MenuId = "multichain-api" | "standard-api";

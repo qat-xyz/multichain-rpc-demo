@@ -20,16 +20,16 @@ export const Documentation: FunctionComponent = () => {
     [Id in MenuId]: any[];
   }>(
     () => ({
-      "multi-chain-api":
+      "multichain-api":
         specs.value?.methods
           .filter(method =>
             method.tags.some(
-              (tag: any) => tag.name === specs.value?.components.tags["Multi-Chain"].name,
+              (tag: any) => tag.name === specs.value?.components.tags["Multichain"].name,
             ),
           )
           .map(method => ({
             ...method,
-            id: `multi-chain-api/${method.name}`,
+            id: `multichain-api/${method.name}`,
           })) ?? [],
       "standard-api":
         specs.value?.methods
