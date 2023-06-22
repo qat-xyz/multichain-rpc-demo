@@ -26,7 +26,7 @@ export const DocumentationMethod: FunctionComponent<{
 }> = ({ id, name, summary, description, params, result }) => {
   const location = useLocation();
   return (
-    <AccordionItem _expanded={{}}>
+    <AccordionItem>
       <AccordionButton
         as={NavLink}
         to={`#${id}`}
@@ -41,7 +41,7 @@ export const DocumentationMethod: FunctionComponent<{
           },
         }}
         _expanded={{
-          backgroundColor: "gray.100",
+          backgroundColor: "blackAlpha.50",
         }}
       >
         <Box id={id} position={"absolute"} top={"-90px"} />
