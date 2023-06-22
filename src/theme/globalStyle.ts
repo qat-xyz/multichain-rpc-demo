@@ -3,8 +3,8 @@ export const globalStyle = {
     fontSize: "16px",
   },
   ".markdown": {
-    wordBreak: "break-all",
     a: {
+      wordBreak: "break-all",
       color: "primary.500",
       _hover: {
         color: "primary.400",
