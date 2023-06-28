@@ -22,15 +22,16 @@ export const DocumentationMethod: FunctionComponent<{
   method: {
     id: string;
     name: string;
-    description?: string;
     summary?: string;
+    description?: string;
+    tags?: any[];
     options?: any;
     params?: any;
     result?: any;
-    tags?: any[];
+    errors?: any;
   };
 }> = ({ method }) => {
-  const { id, name, summary, description, options, params, result, tags } = method;
+  const { id, name, summary, description, tags, options, params, result, errors } = method;
   const location = useLocation();
   return (
     <AccordionItem>
@@ -130,6 +131,22 @@ export const DocumentationMethod: FunctionComponent<{
                 displayObjectSize={false}
                 enableClipboard={false}
                 src={result.schema}
+              />
+            </VStack>
+          )}
+          {errors && (
+            <VStack alignItems={"stretch"} textAlign={"left"}>
+              <Text fontWeight={"semibold"}>Errors</Text>
+              <ReactJson
+                name={null}
+                collapsed={true}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                enableClipboard={false}
+                src={errors.reduce(
+                  (result: any, error: any) => ({ ...result, [error.code]: error }),
+                  {},
+                )}
               />
             </VStack>
           )}
