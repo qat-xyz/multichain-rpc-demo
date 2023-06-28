@@ -7,7 +7,9 @@ import {
   Box,
   Divider,
   HStack,
+  Tag,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
@@ -17,14 +19,19 @@ import { NavLink, useLocation } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 
 export const DocumentationMethod: FunctionComponent<{
-  id: string;
-  name: string;
-  description?: string;
-  summary?: string;
-  params?: any;
-  result?: any;
-}> = ({ id, name, summary, description, params, result }) => {
+  method: {
+    id: string;
+    name: string;
+    description?: string;
+    summary?: string;
+    params?: any;
+    result?: any;
+    tags?: any[];
+  };
+}> = ({ method }) => {
+  const { id, name, summary, description, params, result, tags } = method;
   const location = useLocation();
+  const options = tags?.find((tag: any) => !!tag.options)?.options;
   return (
     <AccordionItem>
       <AccordionButton
@@ -66,15 +73,41 @@ export const DocumentationMethod: FunctionComponent<{
               </ReactMarkdown>
             )}
             {description && (
-              <ReactMarkdown
-                className={"markdown"}
-                remarkPlugins={[remarkGfm]}
-                linkTarget={"_blank"}
-              >
-                {description}
-              </ReactMarkdown>
+              <VStack alignItems={"stretch"} spacing={4}>
+                <ReactMarkdown
+                  className={"markdown"}
+                  remarkPlugins={[remarkGfm]}
+                  linkTarget={"_blank"}
+                >
+                  {description}
+                </ReactMarkdown>
+                {tags?.length && (
+                  <HStack justifyContent={"flex-end"}>
+                    {tags.map(tag => (
+                      <Tooltip key={tag.name} label={tag.description}>
+                        <Tag size={"sm"} colorScheme={tag.color} style={{ userSelect: "none" }}>
+                          {tag.name}
+                        </Tag>
+                      </Tooltip>
+                    ))}
+                  </HStack>
+                )}
+              </VStack>
             )}
           </VStack>
+          {options && (
+            <VStack alignItems={"stretch"} textAlign={"left"}>
+              <Text fontWeight={"semibold"}>Options</Text>
+              <ReactJson
+                name={"options"}
+                collapsed={true}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                enableClipboard={false}
+                src={options}
+              />
+            </VStack>
+          )}
           {params?.length && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Params</Text>
@@ -98,7 +131,7 @@ export const DocumentationMethod: FunctionComponent<{
             [result].map(data => {
               const { name, ...rest } = data;
               return (
-                <VStack alignItems={"stretch"} textAlign={"left"}>
+                <VStack key={name} alignItems={"stretch"} textAlign={"left"}>
                   <Text fontWeight={"semibold"}>Result</Text>
                   <ReactJson
                     name={name}

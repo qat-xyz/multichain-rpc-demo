@@ -3311,24 +3311,43 @@
     },
     "tags": {
       "Multichain": {
-        "name": "Multichain API",
-        "description": "The Multichain methods constitute a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multichain user experience."
+        "name": "Multichain",
+        "description": "This method is part of a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multi-chain user experience by targeting a specific user network or chain ID.",
+        "color": "orange",
+        "options": {
+          "description": "Optional RPC options.",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "chainId": {
+                "description": "Specify the integer ID of the chain as a number or hexadecimal string.",
+                "type": {
+                  "anyOf": ["string", "Integer"]
+                }
+              }
+            }
+          }
+        }
       },
       "Standard": {
-        "name": "Standard API",
-        "description": "The Standard RPC methods encompass a set of commonly implemented RPC methods found in the majority of existing wallets. These methods serve as a standardized interface for communication and interaction with the blockchain network, ensuring compatibility and ease of integration across various wallet implementations."
+        "name": "Standard",
+        "description": "This method can be found in the majority of existing wallets, serving as a standardized interface that ensures compatibility and ease of integration across various wallet implementations.",
+        "color": "green"
       },
       "Ethereum": {
-        "name": "Ethereum API",
-        "description": "Ethereum Node JSON-RPC method."
+        "name": "Ethereum",
+        "description": "Standard ethereum node RPC method.",
+        "color": "blue"
       },
       "Quantum": {
-        "name": "Quantum API",
-        "description": "Quantum-specific methods."
+        "name": "Quantum",
+        "description": "Quantum-specific RPC method.",
+        "color": "primary"
       },
       "Restricted": {
         "name": "Restricted",
-        "description": "Restricted methods. If a method is restricted, the caller must have the corresponding permission via `wallet_requestPermissions` in order to call it."
+        "description": "The caller must have the corresponding permission via `wallet_requestPermissions` in order to invoke this method.",
+        "color": "red"
       }
     }
   }
