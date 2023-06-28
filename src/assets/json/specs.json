@@ -6,6 +6,85 @@
   },
   "methods": [
     {
+      "name": "wallet_chainIds",
+      "tags": [
+        {
+          "$ref": "#/components/tags/Multichain"
+        },
+        {
+          "$ref": "#/components/tags/Quantum"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "summary": "Get the selected account chainIds.",
+      "errors": [
+        {
+          "code": -32602,
+          "message": "Expected null or array with at least one valid string HTTPS URL 'blockExplorerUrl'. Received: ${blockExplorerUrls}"
+        },
+        {
+          "code": -32602,
+          "message": "Expected 0x-prefixed, unpadded, non-zero hexadecimal string 'chainId'. Received:\n${chainId}"
+        },
+        {
+          "code": -32602,
+          "message": "Invalid chain ID \"${_chainId}\": numerical value greater than max safe value. Received:\n${chainId}"
+        },
+        {
+          "code": -32602,
+          "message": "May not specify default Quantum chain."
+        },
+        {
+          "code": -32602,
+          "message": "Expected 2-6 character string 'nativeCurrency.symbol'. Received:\n${ticker}"
+        },
+        {
+          "code": -32602,
+          "message": "nativeCurrency.symbol does not match currency symbol for a network the user already has added with the same chainId. Received:\n${ticker}"
+        }
+      ],
+      "result": {
+        "name": "ChainIdsResult",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "examples": [
+        {
+          "name": "wallet_addEthereumChain example",
+          "params": [
+            {
+              "name": "AddEthereumChainParameter",
+              "value": {
+                "chainId": "0x64",
+                "chainName": "Gnosis",
+                "rpcUrls": ["https://rpc.ankr.com/gnosis"],
+                "iconUrls": [
+                  "https://xdaichain.com/fake/example/url/xdai.svg",
+                  "https://xdaichain.com/fake/example/url/xdai.png"
+                ],
+                "nativeCurrency": {
+                  "name": "xDAI",
+                  "symbol": "xDAI",
+                  "decimals": 18
+                },
+                "blockExplorerUrls": ["https://blockscout.com/poa/xdai/"]
+              }
+            }
+          ],
+          "result": {
+            "name": "wallet_addEthereumChainExampleResult",
+            "value": "null"
+          }
+        }
+      ]
+    },
+    {
       "name": "wallet_addEthereumChain",
       "tags": [
         {
@@ -223,6 +302,9 @@
       "summary": "Tracks a token in Quantum.",
       "description": "Requests that the user track the specified token in Quantum. Returns a boolean indicating if the token was successfully added. Once added, the token is indistinguishable from those added using legacy methods, such as a centralized registry. Originally introduced by [EIP-747](https://eips.ethereum.org/EIPS/eip-747), however the current specification for EIP-747 has diverged from the implementation in Quantum. The implementation in Quantum, described below, matches the version of EIP-747 found here: https://github.com/ethereum/EIPs/blob/36102e0c82630e2654fd019f54914330d1c37f74/EIPS/eip-747.md",
       "paramStructure": "by-name",
+      "options": {
+        "$ref": "#/components/schemas/MethodOptions"
+      },
       "params": [
         {
           "name": "type",
@@ -3307,27 +3389,25 @@
             "$ref": "#/components/schemas/uint64"
           }
         }
+      },
+      "MethodOptions": {
+        "type": "object",
+        "description": "Optional RPC options.",
+        "properties": {
+          "chainId": {
+            "description": "Specify the integer ID of the chain as a number or hexadecimal string.",
+            "type": {
+              "anyOf": ["string", "Integer"]
+            }
+          }
+        }
       }
     },
     "tags": {
       "Multichain": {
         "name": "Multichain",
         "description": "This method is part of a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multi-chain user experience by targeting a specific user network or chain ID.",
-        "color": "orange",
-        "options": {
-          "description": "Optional RPC options.",
-          "schema": {
-            "type": "object",
-            "properties": {
-              "chainId": {
-                "description": "Specify the integer ID of the chain as a number or hexadecimal string.",
-                "type": {
-                  "anyOf": ["string", "Integer"]
-                }
-              }
-            }
-          }
-        }
+        "color": "orange"
       },
       "Standard": {
         "name": "Standard",

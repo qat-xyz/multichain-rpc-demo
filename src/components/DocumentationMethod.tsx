@@ -24,14 +24,14 @@ export const DocumentationMethod: FunctionComponent<{
     name: string;
     description?: string;
     summary?: string;
+    options?: any;
     params?: any;
     result?: any;
     tags?: any[];
   };
 }> = ({ method }) => {
-  const { id, name, summary, description, params, result, tags } = method;
+  const { id, name, summary, description, options, params, result, tags } = method;
   const location = useLocation();
-  const options = tags?.find((tag: any) => !!tag.options)?.options;
   return (
     <AccordionItem>
       <AccordionButton
@@ -73,26 +73,24 @@ export const DocumentationMethod: FunctionComponent<{
               </ReactMarkdown>
             )}
             {description && (
-              <VStack alignItems={"stretch"} spacing={4}>
-                <ReactMarkdown
-                  className={"markdown"}
-                  remarkPlugins={[remarkGfm]}
-                  linkTarget={"_blank"}
-                >
-                  {description}
-                </ReactMarkdown>
-                {tags?.length && (
-                  <HStack justifyContent={"flex-end"}>
-                    {tags.map(tag => (
-                      <Tooltip key={tag.name} label={tag.description}>
-                        <Tag size={"sm"} colorScheme={tag.color} style={{ userSelect: "none" }}>
-                          {tag.name}
-                        </Tag>
-                      </Tooltip>
-                    ))}
-                  </HStack>
-                )}
-              </VStack>
+              <ReactMarkdown
+                className={"markdown"}
+                remarkPlugins={[remarkGfm]}
+                linkTarget={"_blank"}
+              >
+                {description}
+              </ReactMarkdown>
+            )}
+            {tags?.length && (
+              <HStack justifyContent={"flex-end"}>
+                {tags.map(tag => (
+                  <Tooltip key={tag.name} label={tag.description}>
+                    <Tag size={"sm"} colorScheme={tag.color} style={{ userSelect: "none" }}>
+                      {tag.name}
+                    </Tag>
+                  </Tooltip>
+                ))}
+              </HStack>
             )}
           </VStack>
           {options && (
@@ -111,39 +109,30 @@ export const DocumentationMethod: FunctionComponent<{
           {params?.length && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Params</Text>
-              {params.map((param: any) => {
-                const { name, ...rest } = param;
-                return (
-                  <ReactJson
-                    key={name}
-                    name={name}
-                    collapsed={true}
-                    displayDataTypes={false}
-                    displayObjectSize={false}
-                    enableClipboard={false}
-                    src={rest}
-                  />
-                );
-              })}
+              <ReactJson
+                key={name}
+                name={"params"}
+                collapsed={true}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                enableClipboard={false}
+                src={params.map((param: any) => param.schema)}
+              />
             </VStack>
           )}
-          {result &&
-            [result].map(data => {
-              const { name, ...rest } = data;
-              return (
-                <VStack key={name} alignItems={"stretch"} textAlign={"left"}>
-                  <Text fontWeight={"semibold"}>Result</Text>
-                  <ReactJson
-                    name={name}
-                    collapsed={true}
-                    displayDataTypes={false}
-                    displayObjectSize={false}
-                    enableClipboard={false}
-                    src={rest}
-                  />
-                </VStack>
-              );
-            })}
+          {result && (
+            <VStack alignItems={"stretch"} textAlign={"left"}>
+              <Text fontWeight={"semibold"}>Result</Text>
+              <ReactJson
+                name={null}
+                collapsed={true}
+                displayDataTypes={false}
+                displayObjectSize={false}
+                enableClipboard={false}
+                src={result.schema}
+              />
+            </VStack>
+          )}
         </VStack>
       </AccordionPanel>
     </AccordionItem>
