@@ -35,7 +35,7 @@ export const DocumentationMethods: FunctionComponent = () => {
           const timer = setTimeout(() => {
             element.scrollIntoView({ behavior: "smooth" });
             scrolledRef.current = true;
-          }, 100);
+          }, 200);
           return () => {
             clearTimeout(timer);
           };

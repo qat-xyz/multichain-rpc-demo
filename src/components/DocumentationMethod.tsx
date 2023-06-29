@@ -18,6 +18,8 @@ import ReactMarkdown from "react-markdown";
 import { NavLink, useLocation } from "react-router-dom";
 import remarkGfm from "remark-gfm";
 
+import { Example } from "./Example";
+
 export const DocumentationMethod: FunctionComponent<{
   method: {
     id: string;
@@ -29,9 +31,11 @@ export const DocumentationMethod: FunctionComponent<{
     params?: any;
     result?: any;
     errors?: any;
+    examples?: any[];
   };
 }> = ({ method }) => {
-  const { id, name, summary, description, tags, options, params, result, errors } = method;
+  const { id, name, summary, description, tags, options, params, result, errors, examples } =
+    method;
   const location = useLocation();
   return (
     <AccordionItem>
@@ -143,11 +147,16 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={errors.reduce(
-                  (result: any, error: any) => ({ ...result, [error.code]: error }),
-                  {},
-                )}
+                src={errors}
               />
+            </VStack>
+          )}
+          {examples?.length && (
+            <VStack alignItems={"stretch"} textAlign={"left"}>
+              <Text fontWeight={"semibold"}>Examples</Text>
+              {examples.map(example => (
+                <Example key={example.name} example={example} />
+              ))}
             </VStack>
           )}
         </VStack>
