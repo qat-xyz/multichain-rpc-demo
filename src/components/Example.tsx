@@ -1,22 +1,41 @@
-import { Button, HStack, Stack, Text, useClipboard, VStack } from "@chakra-ui/react";
+import {
+  Button,
+  ButtonGroup,
+  HStack,
+  IconButton,
+  Stack,
+  Text,
+  useClipboard,
+  VStack,
+} from "@chakra-ui/react";
 import { javascript } from "@codemirror/lang-javascript";
 import { EditorView } from "@codemirror/view";
 import { atomone } from "@uiw/codemirror-theme-atomone";
 import CodeMirror from "@uiw/react-codemirror";
 import { FunctionComponent, useCallback, useRef, useState } from "react";
-import { IoIosCopy, IoIosPlay } from "react-icons/io";
+import { IoIosCopy, IoIosPlay, IoMdList } from "react-icons/io";
+
+import { formatCode } from "../utils/formatCode";
 
 export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [code, setCode] = useState(() => {
-    const req = JSON.stringify(example.data, null, "\t").replaceAll("\n", "\n  ");
-    return `//${example.name}\ntry {\n\tconst result = await window.ethereum.request(${req});\n\tconsole.log(result);\n} catch(e){\n\tconsole.error(e)\n}\n`;
-  });
+  const [code, setCode] = useState(() =>
+    formatCode(
+      `// ${example.name}
+      try {
+        const result = await window.ethereum.request(${JSON.stringify(example.data)});
+        console.log(result);
+      } catch(e){
+        console.error(e)
+      }`,
+    ),
+  );
   const { onCopy, hasCopied } = useClipboard(code);
-  const [log, setLog] = useState<string[]>([]);
+  const [log, setLog] = useState<string>("");
+  const { onCopy: onCopyResult, hasCopied: hasCopiedResult } = useClipboard(log);
 
   const run = useCallback(() => {
-    setLog([]);
+    setLog("");
     const iframeWindow = iframeRef.current?.contentWindow;
 
     // Capture console output
@@ -50,10 +69,19 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
 
       for (const method of consoleMethods) {
         iframeConsole[method] = (...args: any[]) => {
-          setLog(data => [
-            ...data,
-            `// ${method}\n${args.map(item => JSON.stringify(item, null, 2)).join(",")}`,
-          ]);
+          setLog(
+            data =>
+              data +
+              `// ${method}\n${args
+                .map(arg =>
+                  formatCode(JSON.stringify(arg), {
+                    semi: false,
+                  })
+                    .trim()
+                    .replace(/^;/gm, ""),
+                )
+                .join(" ")}\n`,
+          );
         };
       }
       // @ts-ignore
@@ -83,19 +111,60 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
           <Text color={"whiteAlpha.700"} textAlign={"left"} noOfLines={1} flex={1}>
             Editable Example
           </Text>
-          <HStack spacing={4}>
+          <ButtonGroup
+            display={{
+              base: "flex",
+              lg: "none",
+            }}
+          >
+            <IconButton
+              aria-label={"format"}
+              colorScheme={"messenger"}
+              size={"sm"}
+              icon={<IoMdList />}
+              onClick={() => setCode(formatCode(code))}
+            />
+            <IconButton
+              aria-label={"copy"}
+              colorScheme={"teal"}
+              size={"sm"}
+              icon={<IoIosCopy />}
+              onClick={onCopy}
+            />
+            <IconButton
+              aria-label={"run"}
+              colorScheme={"primary"}
+              size={"sm"}
+              icon={<IoIosPlay />}
+              onClick={run}
+            />
+          </ButtonGroup>
+          <ButtonGroup
+            display={{
+              base: "none",
+              lg: "flex",
+            }}
+          >
+            <Button
+              colorScheme={"messenger"}
+              size={"sm"}
+              leftIcon={<IoMdList />}
+              onClick={() => setCode(formatCode(code))}
+            >
+              Format
+            </Button>
             <Button colorScheme={"teal"} size={"sm"} leftIcon={<IoIosCopy />} onClick={onCopy}>
               {hasCopied ? "Copied" : "Copy"}
             </Button>
             <Button colorScheme={"primary"} size={"sm"} leftIcon={<IoIosPlay />} onClick={run}>
               Run
             </Button>
-          </HStack>
+          </ButtonGroup>
         </HStack>
         <CodeMirror
           value={code}
           theme={atomone}
-          height={"400px"}
+          height={"300px"}
           minHeight={"100%"}
           extensions={[javascript(), EditorView.lineWrapping]}
           onChange={value => setCode(value)}
@@ -116,12 +185,35 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
           <Text color={"whiteAlpha.700"} textAlign={"left"} flex={1}>
             Result
           </Text>
+          <Button
+            colorScheme={"teal"}
+            size={"sm"}
+            leftIcon={<IoIosCopy />}
+            onClick={onCopyResult}
+            display={{
+              base: "none",
+              lg: "flex",
+            }}
+          >
+            {hasCopiedResult ? "Copied" : "Copy"}
+          </Button>
+          <IconButton
+            aria-label={"copy result"}
+            colorScheme={"teal"}
+            size={"sm"}
+            icon={<IoIosCopy />}
+            onClick={onCopyResult}
+            display={{
+              base: "flex",
+              lg: "none",
+            }}
+          />
         </HStack>
         <CodeMirror
-          value={log.join("\n")}
+          value={log}
           theme={atomone}
           editable={false}
-          height={"400px"}
+          height={"300px"}
           minHeight={"100%"}
           extensions={[javascript(), EditorView.lineWrapping]}
           basicSetup={{
