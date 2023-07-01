@@ -35,6 +35,7 @@
     "react-icons": "^3.0.0",
     "react-json-view": "^1.21.3",
     "react-markdown": "^8.0.7",
+    "react-resizable-panels": "^0.0.53",
     "react-router-dom": "^6.13.0",
     "react-scripts": "5.0.1",
     "react-use": "^17.4.0",
