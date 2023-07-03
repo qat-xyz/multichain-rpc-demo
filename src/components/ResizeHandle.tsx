@@ -9,7 +9,7 @@ export const ResizeHandle = () => (
     outline={"none"}
     css={{
       "&[data-resize-handle-active] > div": {
-        backgroundColor: "rgba(74,85,104,0.4)",
+        backgroundColor: "rgba(128,90,213,0.5)",
       },
     }}
   >

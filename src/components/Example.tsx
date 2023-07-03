@@ -17,9 +17,11 @@ import { IoIosCopy, IoIosPlay, IoIosTrash, IoMdList, IoMdRefresh } from "react-i
 import { Panel, PanelGroup } from "react-resizable-panels";
 
 import { ResizeHandle } from "./ResizeHandle";
+import { useConnection } from "../providers/ConnectionProvider";
 import { formatCode } from "../utils/formatCode";
 
 export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
+  const { account } = useConnection();
   const defaultCode = formatCode(
     `// ${example.name}
       try {
@@ -91,9 +93,14 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
       // @ts-ignore
       iframeWindow.ethereum = window.quantum;
       // @ts-ignore
-      iframeWindow.eval(`(async () => {${code}})()`);
+      iframeWindow.eval(
+        `(async () => {${code}})()`.replace(
+          /\[\[account]]/gi,
+          account ?? "0x0000000000000000000000000000000000000000",
+        ),
+      );
     }
-  }, [code, setLog]);
+  }, [account, code]);
 
   return (
     <Box>
@@ -171,7 +178,10 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
               </ButtonGroup>
             </HStack>
             <CodeMirror
-              value={code}
+              value={code.replace(
+                /\[\[account]]/gi,
+                account ?? "0x0000000000000000000000000000000000000000",
+              )}
               theme={atomone}
               height={"100%"}
               maxHeight={"500px"}

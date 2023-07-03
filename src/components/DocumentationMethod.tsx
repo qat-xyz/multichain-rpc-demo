@@ -111,7 +111,7 @@ export const DocumentationMethod: FunctionComponent<{
               />
             </VStack>
           )}
-          {params?.length && (
+          {params && Object.keys(params)?.length && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Params</Text>
               <ReactJson
@@ -121,7 +121,7 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={params.map((param: any) => param.schema)}
+                src={params}
               />
             </VStack>
           )}
@@ -134,7 +134,7 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={result.schema}
+                src={result}
               />
             </VStack>
           )}
