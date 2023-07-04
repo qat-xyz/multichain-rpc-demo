@@ -317,7 +317,7 @@
       },
       "examples": [
         {
-          "name": "Add an ERC20 token to the connection default network",
+          "name": "Add an ERC20 token on the connection default network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
@@ -333,7 +333,7 @@
           }
         },
         {
-          "name": "Add the DOGE token to the Binance network",
+          "name": "Add the DOGE token on the Binance network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
@@ -684,7 +684,7 @@
       },
       "examples": [
         {
-          "name": "Get a block by hash for the connection default network",
+          "name": "Get a block by hash on the connection default network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
@@ -693,7 +693,7 @@
           }
         },
         {
-          "name": "Get a block by hash for the Polygon network",
+          "name": "Get a block by hash on the Polygon network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
@@ -738,7 +738,7 @@
       },
       "examples": [
         {
-          "name": "Get a block by number for the connection default network",
+          "name": "Get a block by number on the connection default network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
@@ -783,7 +783,30 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Transaction count"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a block transactions count by hash on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByHash",
+            "params": ["0xb3b20624f8f0f86eb50dd04688409e5cea4bd02d700bf6e79e9384d47d6a5a35"]
+          }
+        },
+        {
+          "name": "Get a block transactions count by hash on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByHash",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x81e807e7a6031d9f103eeee2a2edc5994c3432ee1e3227c66ff78eef30ea1dec"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getBlockTransactionCountByNumber",
@@ -807,7 +830,30 @@
       "result": {
         "description": "Transaction count",
         "$ref": "#/components/schemas/uint"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a block transactions count by number on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByNumber",
+            "params": ["0x5BAD55"]
+          }
+        },
+        {
+          "name": "Get the latest block transactions count of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByNumber",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["latest"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getUncleCountByBlockHash",
@@ -832,11 +878,34 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Uncle count"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a block uncles count by hash on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getUncleCountByBlockHash",
+            "params": ["0xb3b20624f8f0f86eb50dd04688409e5cea4bd02d700bf6e79e9384d47d6a5a35"]
+          }
+        },
+        {
+          "name": "Get a block uncles count by hash on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getUncleCountByBlockHash",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x81e807e7a6031d9f103eeee2a2edc5994c3432ee1e3227c66ff78eef30ea1dec"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getUncleCountByBlockNumber",
-      "summary": "Returns the number of transactions in a block matching the given block number.",
+      "summary": "Returns the number of uncles in a block matching the given block number.",
       "tags": [
         {
           "$ref": "#/components/tags/Multichain"
@@ -856,7 +925,30 @@
       "result": {
         "name": "Uncle count",
         "$ref": "#/components/schemas/uint"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a block uncles count by number on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByNumber",
+            "params": ["0x5BAD55"]
+          }
+        },
+        {
+          "name": "Get the latest block uncles count of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBlockTransactionCountByNumber",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["latest"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_syncing",
@@ -875,7 +967,28 @@
       "result": {
         "$ref": "#/components/schemas/SyncingStatus",
         "description": "Syncing status"
-      }
+      },
+      "examples": [
+        {
+          "name": "The syncing status of the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_syncing"
+          }
+        },
+        {
+          "name": "The syncing status of the Binance network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x38"
+            },
+            "method": "eth_syncing"
+          }
+        }
+      ]
     },
     {
       "name": "eth_coinbase",
@@ -891,7 +1004,17 @@
       "result": {
         "$ref": "#/components/schemas/address",
         "description": "Coinbase address"
-      }
+      },
+      "examples": [
+        {
+          "name": "The wallet selected account coinbase address",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_coinbase"
+          }
+        }
+      ]
     },
     {
       "name": "eth_blockNumber",
@@ -910,7 +1033,28 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Block number"
-      }
+      },
+      "examples": [
+        {
+          "name": "The latest block number of the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_blockNumber"
+          }
+        },
+        {
+          "name": "The latest block number of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x89"
+            },
+            "method": "eth_blockNumber"
+          }
+        }
+      ]
     },
     {
       "name": "eth_call",
@@ -989,7 +1133,28 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Gas price"
-      }
+      },
+      "examples": [
+        {
+          "name": "The gas price of the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_gasPrice"
+          }
+        },
+        {
+          "name": "The gas price of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x89"
+            },
+            "method": "eth_gasPrice"
+          }
+        }
+      ]
     },
     {
       "name": "eth_maxPriorityFeePerGas",
@@ -1008,7 +1173,28 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Max priority fee per gas"
-      }
+      },
+      "examples": [
+        {
+          "name": "The max priority fee per gas of the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_maxPriorityFeePerGas"
+          }
+        },
+        {
+          "name": "The max priority fee per gas of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x89"
+            },
+            "method": "eth_maxPriorityFeePerGas"
+          }
+        }
+      ]
     },
     {
       "name": "eth_feeHistory",
@@ -1037,47 +1223,42 @@
           "description": "Highest block of the requested range."
         },
         {
+          "type": "array",
           "required": true,
           "description": "A monotonically increasing list of percentile values. For each block in the requested range, the transactions will be sorted in ascending order by effective tip per gas and the coresponding effective tip for the percentile will be determined, accounting for gas consumed.",
-          "schema": {
-            "type": "array",
-            "title": "rewardPercentiles",
-            "items": {
-              "type": "number",
-              "description": "Floating point value between 0 and 100."
-            }
+          "items": {
+            "type": "number",
+            "description": "Floating point value between 0 and 100."
           }
         }
       ],
       "result": {
         "type": "object",
         "description": "Fee history for the returned block range. This can be a subsection of the requested range if not all blocks are available.",
-        "schema": {
-          "properties": {
-            "oldestBlock": {
-              "$ref": "#/components/schemas/uint",
-              "required": true,
-              "description": "Lowest number block of returned range."
-            },
-            "baseFeePerGas": {
+        "properties": {
+          "oldestBlock": {
+            "$ref": "#/components/schemas/uint",
+            "required": true,
+            "description": "Lowest number block of returned range."
+          },
+          "baseFeePerGas": {
+            "type": "array",
+            "required": true,
+            "description": "An array of block base fees per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block. Zeroes are returned for pre-EIP-1559 blocks.",
+            "items": {
+              "$ref": "#/components/schemas/uint"
+            }
+          },
+          "reward": {
+            "type": "array",
+            "required": true,
+            "description": "A two-dimensional array of effective priority fees per gas at the requested block percentiles.",
+            "items": {
               "type": "array",
-              "required": true,
-              "description": "An array of block base fees per gas. This includes the next block after the newest of the returned range, because this value can be derived from the newest block. Zeroes are returned for pre-EIP-1559 blocks.",
+              "description": "An array of effective priority fee per gas data points from a single block. All zeroes are returned if the block is empty.",
               "items": {
-                "$ref": "#/components/schemas/uint"
-              }
-            },
-            "reward": {
-              "type": "array",
-              "required": true,
-              "description": "A two-dimensional array of effective priority fees per gas at the requested block percentiles.",
-              "items": {
-                "type": "array",
-                "description": "An array of effective priority fee per gas data points from a single block. All zeroes are returned if the block is empty.",
-                "items": {
-                  "$ref": "#/components/schemas/uint",
-                  "description": "A given percentile sample of effective priority fees per gas from a single block in ascending order, weighted by gas used. Zeroes are returned if the block is empty."
-                }
+                "$ref": "#/components/schemas/uint",
+                "description": "A given percentile sample of effective priority fees per gas from a single block in ascending order, weighted by gas used. Zeroes are returned if the block is empty."
               }
             }
           }
@@ -1333,16 +1514,19 @@
       ],
       "params": [
         {
+          "$ref": "#/components/schemas/bytes8",
           "required": true,
-          "$ref": "#/components/schemas/bytes8"
+          "description": "nonce"
         },
         {
           "$ref": "#/components/schemas/bytes32",
-          "required": true
+          "required": true,
+          "description": "hash"
         },
         {
           "$ref": "#/components/schemas/bytes32",
-          "required": true
+          "required": true,
+          "description": "digest"
         }
       ],
       "result": {
@@ -1367,11 +1551,13 @@
       "params": [
         {
           "$ref": "#/components/schemas/bytes32",
-          "required": true
+          "required": true,
+          "description": "Hashrate"
         },
         {
           "$ref": "#/components/schemas/bytes32",
-          "required": true
+          "required": true,
+          "description": "ID"
         }
       ],
       "result": {
@@ -1396,7 +1582,8 @@
       "params": [
         {
           "$ref": "#/components/schemas/address",
-          "required": true
+          "required": true,
+          "description": "Account address"
         },
         {
           "$ref": "#/components/schemas/BlockNumberOrTagOrHash"
@@ -1405,7 +1592,30 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Balance"
-      }
+      },
+      "examples": [
+        {
+          "name": "The latest native account balance of the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getBalance",
+            "params": ["[[account]]", "latest"]
+          }
+        },
+        {
+          "name": "The latest native account balance of the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x89"
+            },
+            "method": "eth_getBalance",
+            "params": ["[[account]]", "latest"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getStorageAt",
@@ -1471,7 +1681,30 @@
       "result": {
         "$ref": "#/components/schemas/uint",
         "description": "Transaction count"
-      }
+      },
+      "examples": [
+        {
+          "name": "The number of transactions sent from the account on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionCount",
+            "params": ["[[account]]", "latest"]
+          }
+        },
+        {
+          "name": "The number of transactions sent from the account on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "options": {
+              "chainId": "0x89"
+            },
+            "method": "eth_getTransactionCount",
+            "params": ["[[account]]", "latest"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getCode",
@@ -1502,7 +1735,30 @@
       "result": {
         "$ref": "#/components/schemas/bytes",
         "description": "Bytecode"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a contract code on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getCode",
+            "params": ["0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", "latest"]
+          }
+        },
+        {
+          "name": "Get the USDC code on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getCode",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174", "latest"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getProof",
@@ -1593,7 +1849,30 @@
       "result": {
         "$ref": "#/components/schemas/TransactionInfo",
         "description": "Transaction information"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a transaction by hash on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByHash",
+            "params": ["0xac574a02211f1e90f9b79f7985d476073a72658b116905152412e5351ff859be"]
+          }
+        },
+        {
+          "name": "Get a transaction by hash on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByHash",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x61beb9d5f992011e5cdab4c1a77787d0ed5044f435561aa4797ac949c00bf3f5"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getTransactionByBlockHashAndIndex",
@@ -1624,7 +1903,30 @@
       "result": {
         "$ref": "#/components/schemas/TransactionInfo",
         "description": "Transaction information"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a transaction by block hash and index on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByBlockHashAndIndex",
+            "params": ["0xb3b20624f8f0f86eb50dd04688409e5cea4bd02d700bf6e79e9384d47d6a5a35", "0x0"]
+          }
+        },
+        {
+          "name": "Get a transaction by block hash and index on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByBlockHashAndIndex",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x81e807e7a6031d9f103eeee2a2edc5994c3432ee1e3227c66ff78eef30ea1dec", "0x2"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getTransactionByBlockNumberAndIndex",
@@ -1655,7 +1957,30 @@
       "result": {
         "$ref": "#/components/schemas/TransactionInfo",
         "description": "Transaction information"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a transaction by block number and index on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByBlockNumberAndIndex",
+            "params": ["0x5BAD55", "0x0"]
+          }
+        },
+        {
+          "name": "Get a transaction from the latest block by index on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionByBlockNumberAndIndex",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["latest", "0x2"]
+          }
+        }
+      ]
     },
     {
       "name": "eth_getTransactionReceipt",
@@ -1680,7 +2005,30 @@
       "result": {
         "$ref": "#/components/schemas/ReceiptInfo",
         "description": "Receipt Information"
-      }
+      },
+      "examples": [
+        {
+          "name": "Get a transaction receipt by hash on the connection default network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionReceipt",
+            "params": ["0xac574a02211f1e90f9b79f7985d476073a72658b116905152412e5351ff859be"]
+          }
+        },
+        {
+          "name": "Get a transaction receipt by hash on the Polygon network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "eth_getTransactionReceipt",
+            "options": {
+              "chainId": "0x89"
+            },
+            "params": ["0x61beb9d5f992011e5cdab4c1a77787d0ed5044f435561aa4797ac949c00bf3f5"]
+          }
+        }
+      ]
     }
   ],
   "components": {
