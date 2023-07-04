@@ -12,7 +12,7 @@ export const Documentation: FunctionComponent = () => {
     <Box position={"relative"} minHeight={"100vh"}>
       <Navigation />
       <Container
-        maxW={"6xl"}
+        maxW={"7xl"}
         bg={"whiteAlpha.800"}
         minHeight={"100vh"}
         boxShadow={"md"}

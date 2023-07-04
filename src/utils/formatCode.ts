@@ -9,9 +9,6 @@ export const formatCode = (code: string, options?: Options) => {
       plugins: [parserBabel],
       ...options,
     });
-  } catch (e) {
-    // ignore
-    console.log(e);
-  }
+  } catch {}
   return code;
 };
