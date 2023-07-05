@@ -37,27 +37,91 @@
       ]
     },
     {
-      "name": "eth_chainId",
-      "summary": "Returns the connection default network chain ID.",
+      "name": "wallet_watchAsset",
+      "summary": "Tracks a token in Quantum.",
+      "description": "Requests that the user track the specified token in Quantum. Returns a boolean indicating if the token was successfully added. Once added, the token is indistinguishable from those added using legacy methods, such as a centralized registry. Originally introduced by [EIP-747](https://eips.ethereum.org/EIPS/eip-747), however the current specification for EIP-747 has diverged from the implementation in Quantum. The implementation in Quantum, described below, matches the version of EIP-747 found here: https://github.com/ethereum/EIPs/blob/36102e0c82630e2654fd019f54914330d1c37f74/EIPS/eip-747.md. In Quantum, you have the option to specify the network to which the token will be added. If not specified, the token will be added to the default chain ID selected for the current connection.",
       "tags": [
+        {
+          "$ref": "#/components/tags/Multichain"
+        },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Quantum"
         }
       ],
+      "options": {
+        "$ref": "#/components/schemas/MethodOptions"
+      },
+      "params": {
+        "type": {
+          "type": "string",
+          "description": "Currently only supports ERC20 tokens.",
+          "enum": ["ERC20"]
+        },
+        "options": {
+          "type": "object",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "The address of the token contract."
+            },
+            "symbol": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 11,
+              "description": "A ticker symbol or shorthand, up to 11 characters."
+            },
+            "decimals": {
+              "type": "number",
+              "description": "The number of token decimals."
+            },
+            "image": {
+              "type": "string",
+              "description": "A string URL of the token logo."
+            }
+          }
+        }
+      },
       "result": {
-        "$ref": "#/components/schemas/uint",
-        "description": "Chain ID"
+        "type": "boolean",
+        "description": "`true` if the token was added, `false` otherwise."
       },
       "examples": [
         {
-          "name": "Get the connection default network chain ID",
+          "name": "Add an ERC20 token on the connection default network",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
-            "method": "eth_chainId"
+            "method": "wallet_watchAsset",
+            "params": {
+              "type": "ERC20",
+              "options": {
+                "address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
+                "symbol": "PEPE",
+                "decimals": 18
+              }
+            }
+          }
+        },
+        {
+          "name": "Add the DOGE token on the Binance network",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "wallet_watchAsset",
+            "options": {
+              "chainId": "0x38"
+            },
+            "params": {
+              "type": "ERC20",
+              "options": {
+                "address": "0xbA2aE424d960c26247Dd6c32edC70B295c744C43",
+                "symbol": "DOGE",
+                "decimals": 8
+              }
+            }
           }
         }
       ]
@@ -232,6 +296,50 @@
       ]
     },
     {
+      "name": "personal_sign",
+      "summary": "Presents a plain text signature challenge to the user.",
+      "description": "Presents a plain text signature challenge to the user and returns the signed response. Equivalent to `eth_sign` on some other wallets, and prepends a safe prefix to the signed message to prevent the challenge tricking users into signing a financial transaction. This method requires that the user has granted permission to interact with their account first, so make sure to call `eth_requestAccounts` first.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Quantum"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "params": [
+        {
+          "type": "string",
+          "required": true,
+          "pattern": "^0x[a-fA-F\\d]+$",
+          "description": "A hex-encoded UTF-8 string to present to the user. See how to encode a string like this in the [`browser-string-hexer`](https://github.com/danfinlay/browser-string-hexer) module."
+        },
+        {
+          "$ref": "#/components/schemas/address",
+          "required": true,
+          "description": "The address of the requested signing account."
+        }
+      ],
+      "result": {
+        "$ref": "#/components/schemas/bytes",
+        "description": "A hex-encoded 129-byte array starting with `0x`."
+      },
+      "examples": [
+        {
+          "name": "Sign a message using the `personal_sign` method",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "personal_sign",
+            "params": ["0x68656c6c6f", "[[account]]"]
+          }
+        }
+      ]
+    },
+    {
       "name": "eth_accounts",
       "description": "Returns a list of addresses for the accounts owned by the user.",
       "summary": "Gets a list of addresses for the user's accounts.",
@@ -264,91 +372,27 @@
       ]
     },
     {
-      "name": "wallet_watchAsset",
-      "summary": "Tracks a token in Quantum.",
-      "description": "Requests that the user track the specified token in Quantum. Returns a boolean indicating if the token was successfully added. Once added, the token is indistinguishable from those added using legacy methods, such as a centralized registry. Originally introduced by [EIP-747](https://eips.ethereum.org/EIPS/eip-747), however the current specification for EIP-747 has diverged from the implementation in Quantum. The implementation in Quantum, described below, matches the version of EIP-747 found here: https://github.com/ethereum/EIPs/blob/36102e0c82630e2654fd019f54914330d1c37f74/EIPS/eip-747.md. In Quantum, you have the option to specify the network to which the token will be added. If not specified, the token will be added to the default chain ID selected for the current connection.",
+      "name": "eth_chainId",
+      "summary": "Returns the connection default network chain ID.",
       "tags": [
-        {
-          "$ref": "#/components/tags/Multichain"
-        },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Ethereum"
         }
       ],
-      "options": {
-        "$ref": "#/components/schemas/MethodOptions"
-      },
-      "params": {
-        "type": {
-          "type": "string",
-          "description": "Currently only supports ERC20 tokens.",
-          "enum": ["ERC20"]
-        },
-        "options": {
-          "type": "object",
-          "properties": {
-            "address": {
-              "type": "string",
-              "description": "The address of the token contract."
-            },
-            "symbol": {
-              "type": "string",
-              "minLength": 2,
-              "maxLength": 11,
-              "description": "A ticker symbol or shorthand, up to 11 characters."
-            },
-            "decimals": {
-              "type": "number",
-              "description": "The number of token decimals."
-            },
-            "image": {
-              "type": "string",
-              "description": "A string URL of the token logo."
-            }
-          }
-        }
-      },
       "result": {
-        "type": "boolean",
-        "description": "`true` if the token was added, `false` otherwise."
+        "$ref": "#/components/schemas/uint",
+        "description": "Chain ID"
       },
       "examples": [
         {
-          "name": "Add an ERC20 token on the connection default network",
+          "name": "Get the connection default network chain ID",
           "data": {
             "id": "0",
             "jsonrpc": "2.0",
-            "method": "wallet_watchAsset",
-            "params": {
-              "type": "ERC20",
-              "options": {
-                "address": "0x6982508145454ce325ddbe47a25d4ec3d2311933",
-                "symbol": "PEPE",
-                "decimals": 18
-              }
-            }
-          }
-        },
-        {
-          "name": "Add the DOGE token on the Binance network",
-          "data": {
-            "id": "0",
-            "jsonrpc": "2.0",
-            "method": "wallet_watchAsset",
-            "options": {
-              "chainId": "0x38"
-            },
-            "params": {
-              "type": "ERC20",
-              "options": {
-                "address": "0xbA2aE424d960c26247Dd6c32edC70B295c744C43",
-                "symbol": "DOGE",
-                "decimals": 8
-              }
-            }
+            "method": "eth_chainId"
           }
         }
       ]
@@ -528,50 +572,6 @@
                 }
               }
             ]
-          }
-        }
-      ]
-    },
-    {
-      "name": "personal_sign",
-      "summary": "Presents a plain text signature challenge to the user.",
-      "description": "Presents a plain text signature challenge to the user and returns the signed response. Equivalent to `eth_sign` on some other wallets, and prepends a safe prefix to the signed message to prevent the challenge tricking users into signing a financial transaction. This method requires that the user has granted permission to interact with their account first, so make sure to call `eth_requestAccounts` first.",
-      "tags": [
-        {
-          "$ref": "#/components/tags/Standard"
-        },
-        {
-          "$ref": "#/components/tags/Quantum"
-        },
-        {
-          "$ref": "#/components/tags/Restricted"
-        }
-      ],
-      "params": [
-        {
-          "type": "string",
-          "required": true,
-          "pattern": "^0x[a-fA-F\\d]+$",
-          "description": "A hex-encoded UTF-8 string to present to the user. See how to encode a string like this in the [`browser-string-hexer`](https://github.com/danfinlay/browser-string-hexer) module."
-        },
-        {
-          "$ref": "#/components/schemas/address",
-          "required": true,
-          "description": "The address of the requested signing account."
-        }
-      ],
-      "result": {
-        "$ref": "#/components/schemas/bytes",
-        "description": "A hex-encoded 129-byte array starting with `0x`."
-      },
-      "examples": [
-        {
-          "name": "Sign a message using the `personal_sign` method",
-          "data": {
-            "id": "0",
-            "jsonrpc": "2.0",
-            "method": "personal_sign",
-            "params": ["0x68656c6c6f", "[[account]]"]
           }
         }
       ]
