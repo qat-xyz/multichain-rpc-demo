@@ -37,7 +37,6 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
     [quantum],
   );
 
-  console.log(connectionState);
   const account = connectionState.value?.[0];
 
   useEffect(() => {
@@ -46,8 +45,8 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
         void connectOrDisconnect(true);
       }
     };
-    quantum.on("accountsChanged", onAccountChanged);
-    return () => quantum.off("accountsChanged", onAccountChanged);
+    quantum?.on("accountsChanged", onAccountChanged);
+    return () => quantum?.off("accountsChanged", onAccountChanged);
   }, [account, connectOrDisconnect, connectionState.value, quantum]);
 
   // save the connection state for eager connection
