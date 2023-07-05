@@ -9,7 +9,10 @@ export const ResizeHandle = () => (
     outline={"none"}
     css={{
       "&[data-resize-handle-active] > div": {
-        backgroundColor: "rgba(128,90,213,0.5)",
+        backgroundColor: "#6B46C1",
+      },
+      "&:hover": {
+        backgroundColor: "#6B46C1",
       },
     }}
   >
@@ -17,8 +20,8 @@ export const ResizeHandle = () => (
       position={"absolute"}
       top={"0"}
       bottom={"0"}
-      left={"0.1em"}
-      right={"0.1em"}
+      left={"0"}
+      right={"0"}
       transition={"background-color 0.2s linear"}
     />
   </Box>

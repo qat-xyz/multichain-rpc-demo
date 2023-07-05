@@ -1,5 +1,6 @@
 import { LinkIcon } from "@chakra-ui/icons";
 import {
+  Accordion,
   AccordionButton,
   AccordionIcon,
   AccordionItem,
@@ -21,6 +22,7 @@ import remarkGfm from "remark-gfm";
 import { Example } from "./Example";
 
 export const DocumentationMethod: FunctionComponent<{
+  isExpanded: boolean;
   method: {
     id: string;
     name: string;
@@ -33,16 +35,14 @@ export const DocumentationMethod: FunctionComponent<{
     errors?: any;
     examples?: any[];
   };
-}> = ({ method }) => {
-  const { id, name, summary, description, tags, options, params, result, errors, examples } =
-    method;
+}> = ({ method, isExpanded }) => {
   const location = useLocation();
   return (
-    <AccordionItem>
+    <>
       <AccordionButton
         as={NavLink}
-        to={`#${id}`}
-        className={location.hash === `#${id}` ? "active-hash" : ""}
+        to={`#${method.id}`}
+        className={location.hash === `#${method.id}` ? "active-hash" : ""}
         position={"relative"}
         css={{
           "&:hover svg": {
@@ -56,10 +56,10 @@ export const DocumentationMethod: FunctionComponent<{
           backgroundColor: "blackAlpha.50",
         }}
       >
-        <Box id={id} position={"absolute"} top={"-90px"} />
+        <Box id={method.id} position={"absolute"} top={"-90px"} />
         <HStack flex={1} marginY={2}>
           <Text as={"h3"} fontSize={"lg"} fontWeight={"semibold"}>
-            {name}
+            {method.name}
           </Text>
           <LinkIcon opacity={0} transition={"opacity 0.2s"} />
         </HStack>
@@ -68,27 +68,27 @@ export const DocumentationMethod: FunctionComponent<{
       <AccordionPanel padding={6} borderX={"1px solid"} borderColor={"gray.200"}>
         <VStack alignItems={"stretch"} spacing={4} divider={<Divider />}>
           <VStack alignItems={"stretch"}>
-            {summary && (
+            {method.summary && (
               <ReactMarkdown
                 className={"markdown"}
                 remarkPlugins={[remarkGfm]}
                 linkTarget={"_blank"}
               >
-                {summary}
+                {method.summary}
               </ReactMarkdown>
             )}
-            {description && (
+            {method.description && (
               <ReactMarkdown
                 className={"markdown"}
                 remarkPlugins={[remarkGfm]}
                 linkTarget={"_blank"}
               >
-                {description}
+                {method.description}
               </ReactMarkdown>
             )}
-            {tags?.length && (
+            {method.tags?.length && (
               <HStack justifyContent={"flex-end"}>
-                {tags.map(tag => (
+                {method.tags.map(tag => (
                   <Tooltip key={tag.name} label={tag.description}>
                     <Tag size={"sm"} colorScheme={tag.color} style={{ userSelect: "none" }}>
                       {tag.name}
@@ -98,7 +98,7 @@ export const DocumentationMethod: FunctionComponent<{
               </HStack>
             )}
           </VStack>
-          {options && (
+          {method.options && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Options</Text>
               <ReactJson
@@ -107,25 +107,24 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={options}
+                src={method.options}
               />
             </VStack>
           )}
-          {params && Object.keys(params)?.length && (
+          {method.params && Object.keys(method.params)?.length && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Params</Text>
               <ReactJson
-                key={name}
                 name={"params"}
                 collapsed={true}
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={params}
+                src={method.params}
               />
             </VStack>
           )}
-          {result && (
+          {method.result && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Result</Text>
               <ReactJson
@@ -134,11 +133,11 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={result}
+                src={method.result}
               />
             </VStack>
           )}
-          {errors && (
+          {method.errors && (
             <VStack alignItems={"stretch"} textAlign={"left"}>
               <Text fontWeight={"semibold"}>Errors</Text>
               <ReactJson
@@ -147,20 +146,46 @@ export const DocumentationMethod: FunctionComponent<{
                 displayDataTypes={false}
                 displayObjectSize={false}
                 enableClipboard={false}
-                src={errors}
+                src={method.errors}
               />
             </VStack>
           )}
-          {examples?.length && (
-            <VStack alignItems={"stretch"} textAlign={"left"}>
+          {method.examples?.length && (
+            <VStack alignItems={"stretch"} textAlign={"left"} spacing={2}>
               <Text fontWeight={"semibold"}>Examples</Text>
-              {examples.map(example => (
-                <Example key={example.name} example={example} />
-              ))}
+              {isExpanded && (
+                <Accordion defaultIndex={0}>
+                  {method.examples.map(example => (
+                    <AccordionItem key={example.name} marginTop={2}>
+                      <AccordionButton
+                        backgroundColor={"primary.500"}
+                        color={"white"}
+                        fontWeight={"semibold"}
+                        _hover={{
+                          backgroundColor: "primary.600",
+                        }}
+                      >
+                        <Text as="span" flex="1" textAlign="left" noOfLines={1}>
+                          {example.name}
+                        </Text>
+                        <AccordionIcon color={"white"} />
+                      </AccordionButton>
+                      <AccordionPanel
+                        paddingTop={0}
+                        paddingX={2}
+                        paddingBottom={2}
+                        backgroundColor={"primary.500"}
+                      >
+                        <Example example={example} />
+                      </AccordionPanel>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              )}
             </VStack>
           )}
         </VStack>
       </AccordionPanel>
-    </AccordionItem>
+    </>
   );
 };
