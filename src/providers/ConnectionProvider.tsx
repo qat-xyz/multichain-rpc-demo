@@ -42,7 +42,7 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
   useEffect(() => {
     const onAccountChanged = (accounts: string[]) => {
       if (accounts?.[0] !== account) {
-        void connectOrDisconnect(true);
+        void connectOrDisconnect(!!accounts?.[0]);
       }
     };
     quantum?.on("accountsChanged", onAccountChanged);
