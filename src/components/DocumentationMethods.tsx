@@ -19,22 +19,22 @@ export const DocumentationMethods: FunctionComponent = () => {
     [specs],
   );
   useEffect(() => {
-    if (specs.value && hash && !scrolledRef.current) {
+    if (methods.length && hash && !scrolledRef.current) {
       const id = hash.replace("#", "");
       const element = document.getElementById(id);
       if (element) {
         const timer = setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
+          element.scrollIntoView({ behavior: "auto" });
           scrolledRef.current = true;
-        }, 100);
+        }, 500);
         return () => {
           clearTimeout(timer);
         };
       }
     }
-  }, [hash, specs.value]);
+  }, [hash, methods.length]);
 
-  return (
+  return methods.length ? (
     <Accordion
       defaultIndex={[methods.findIndex((method: any) => hash === `#${method.id}`)]}
       allowMultiple={true}
@@ -45,5 +45,5 @@ export const DocumentationMethods: FunctionComponent = () => {
         </AccordionItem>
       ))}
     </Accordion>
-  );
+  ) : null;
 };

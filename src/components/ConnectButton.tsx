@@ -31,7 +31,9 @@ export const ConnectButton: FunctionComponent = () => {
             onClick={onCopy}
           >
             <Tooltip label={hasCopied ? "Copied!" : "Copy Address"} fontSize={"xs"} padding={1}>
-              <Text fontSize={"sm"} fontWeight={"semibold"}>{shortenAddress(account ?? "", 4)}</Text>
+              <Text fontSize={"sm"} fontWeight={"semibold"}>
+                {shortenAddress(account ?? "", 4)}
+              </Text>
             </Tooltip>
           </Button>
           <Tooltip label={"Disconnect"} fontSize={"xs"} padding={1}>
@@ -61,7 +63,7 @@ export const ConnectButton: FunctionComponent = () => {
     <Button
       as={Link}
       colorScheme={"primary"}
-      leftIcon={<Image src={ICON_WHITE} height={"20px"} />}
+      leftIcon={<Image src={ICON_WHITE} height={"20px"} width={"20px"} />}
       marginLeft={4}
       paddingLeft={3}
       textDecoration={"none !important"}

@@ -25,49 +25,57 @@ const ConnectionContext = createContext<{
 
 export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const quantum: any = useMemo(() => ("quantum" in window ? window.quantum : undefined), []);
-  const [isConnected, setValue] = useLocalStorage("IS_CONNECTED", false);
+  const [isConnected, setIsConnected] = useLocalStorage("IS_CONNECTED", false);
 
-  const [connectionState, connectOrDisconnect] = useAsyncFn(async isConnect =>
-    isConnect
-      ? quantum.request({
-          method: "eth_requestAccounts",
-        })
-      : false,
+  const [connectionState, connectOrDisconnect] = useAsyncFn(
+    async isConnect =>
+      isConnect
+        ? await quantum.request({
+            method: "eth_requestAccounts",
+          })
+        : [],
+    [quantum],
   );
 
+  console.log(connectionState);
+  const account = connectionState.value?.[0];
+
   useEffect(() => {
-    const onAccountChanged = () => {
-      void connectOrDisconnect(isConnected);
+    const onAccountChanged = (accounts: string[]) => {
+      if (accounts?.[0] !== account) {
+        void connectOrDisconnect(true);
+      }
     };
     quantum.on("accountsChanged", onAccountChanged);
     return () => quantum.off("accountsChanged", onAccountChanged);
-  }, [connectOrDisconnect, isConnected, quantum]);
+  }, [account, connectOrDisconnect, connectionState.value, quantum]);
 
   // save the connection state for eager connection
   useEffect(() => {
-    if (connectionState.value) {
-      setValue(true);
+    if (account) {
+      setIsConnected(true);
     } else {
-      setValue(false);
+      setIsConnected(false);
     }
-  }, [connectionState, setValue]);
+  }, [account, setIsConnected]);
 
   // eager connection
   useEffect(() => {
     if (isConnected) {
       void connectOrDisconnect(true);
     }
-  }, [isConnected, connectOrDisconnect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ConnectionContext.Provider
       value={{
         connect: () => connectOrDisconnect(true),
         disconnect: () => connectOrDisconnect(false),
-        isConnected: !!isConnected,
-        account: connectionState.value?.[0],
+        isConnected: !!account,
         error: connectionState.error,
         loading: connectionState.loading,
+        account,
         quantum,
       }}
     >
