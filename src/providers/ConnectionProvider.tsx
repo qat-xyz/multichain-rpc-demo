@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import {
   createContext,
   FunctionComponent,
@@ -24,6 +25,7 @@ const ConnectionContext = createContext<{
 });
 
 export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
+  const toast = useToast();
   const quantum: any = useMemo(() => ("quantum" in window ? window.quantum : undefined), []);
   const [isConnected, setIsConnected] = useLocalStorage("IS_CONNECTED", false);
 
@@ -38,6 +40,19 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
   );
 
   const account = connectionState.value?.[0];
+
+  useEffect(() => {
+    if (connectionState.error) {
+      toast({
+        title: connectionState.error.name ?? "Connection Failed!",
+        description: (connectionState.error as Error)?.message,
+        status: "error",
+        position: "top",
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  }, [connectionState.error, toast]);
 
   useEffect(() => {
     const onAccountChanged = (accounts: string[]) => {
