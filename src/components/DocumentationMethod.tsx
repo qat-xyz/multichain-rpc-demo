@@ -44,6 +44,7 @@ export const DocumentationMethod: FunctionComponent<{
         to={`#${method.id}`}
         className={location.hash === `#${method.id}` ? "active-hash" : ""}
         position={"relative"}
+        minWidth={0}
         css={{
           "&:hover svg": {
             opacity: 1,
@@ -57,13 +58,13 @@ export const DocumentationMethod: FunctionComponent<{
         }}
       >
         <Box id={method.id} position={"absolute"} top={"-90px"} />
-        <HStack flex={1} marginY={2}>
-          <Text as={"h3"} fontSize={"lg"} fontWeight={"semibold"}>
+        <HStack flex={1} marginY={2} minWidth={0}>
+          <Text as={"h3"} fontSize={"lg"} fontWeight={"semibold"} noOfLines={1}>
             {method.name}
           </Text>
           <LinkIcon opacity={0} transition={"opacity 0.2s"} />
         </HStack>
-        <AccordionIcon />
+        <AccordionIcon marginLeft={2} />
       </AccordionButton>
       <AccordionPanel padding={6} borderX={"1px solid"} borderColor={"gray.200"}>
         <VStack alignItems={"stretch"} spacing={4} divider={<Divider />}>

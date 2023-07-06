@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Divider, Heading, Stack, Text, VStack } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
 import { DocumentationMethods } from "../components/DocumentationMethods";
@@ -16,18 +16,25 @@ export const Documentation: FunctionComponent = () => {
         bg={"whiteAlpha.800"}
         minHeight={"100vh"}
         boxShadow={"md"}
-        paddingX={12}
-        paddingY={32}
+        paddingX={{ base: 6, lg: 12 }}
+        paddingY={{ base: 28, lg: 32 }}
       >
         <VStack alignItems={"stretch"} spacing={8}>
-          <HStack justifyContent={"space-between"}>
+          <Stack
+            alignItems={"stretch"}
+            justifyContent={"space-between"}
+            direction={{
+              base: "column",
+              lg: "row",
+            }}
+          >
             <Heading as="h1" fontSize="2xl">
               {info.title}
             </Heading>
             <Text color={"gray.500"} whiteSpace={"nowrap"}>
               Version {info.version}
             </Text>
-          </HStack>
+          </Stack>
           <Divider />
           <VStack>
             <Text>

@@ -7,7 +7,7 @@ import ICON from "../assets/images/icon.png";
 
 export const Navigation: FunctionComponent = () => (
   <Box position={"fixed"} backgroundColor={"white"} width={"100%"} boxShadow={"md"} zIndex={999}>
-    <Container maxW={"6xl"} paddingX={6} paddingY={2}>
+    <Container maxW={"7xl"} paddingX={{ base: 6, lg: 12 }} paddingY={2}>
       <HStack height={"60px"} spacing={4}>
         <NavLink to={"/"}>
           <HStack>
