@@ -13,9 +13,6 @@
         },
         {
           "$ref": "#/components/tags/Quantum"
-        },
-        {
-          "$ref": "#/components/tags/Restricted"
         }
       ],
       "summary": "Return the selected account chains IDs.",
