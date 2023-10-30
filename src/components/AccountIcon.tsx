@@ -1,24 +1,27 @@
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, AvatarProps } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
-export const AccountIcon: FunctionComponent<{
-  address: string;
-  name?: string;
-  size?: string;
-}> = ({ name, address, size = "sm" }) => (
+export const AccountIcon: FunctionComponent<
+  AvatarProps & {
+    address: string;
+    name?: string;
+  }
+> = ({ name, address, size = "sm", ...props }) => (
   <Avatar
     name={name ?? address}
     size={size}
-    src={`https://avatars.dicebear.com/api/identicon/${address}.svg`}
-    bg={"gray.200"}
-    border={"1px solid"}
-    color={"blackAlpha.400"}
+    src={`https://api.dicebear.com/7.x/identicon/svg?seed=${address}`}
+    color={"gray.200"}
     borderRadius={"full"}
     overflow={"hidden"}
+    backgroundColor={"white"}
     css={{
       img: {
         borderRadius: "0",
+        width: "50%",
+        height: "50%",
       },
     }}
+    {...props}
   />
 );
