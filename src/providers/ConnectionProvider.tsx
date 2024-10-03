@@ -7,7 +7,10 @@ import {
   useEffect,
   useMemo,
 } from "react";
-import { useAsyncFn, useLocalStorage } from "react-use";
+import { useAsync, useAsyncFn, useLocalStorage } from "react-use";
+
+import { QuantumAccount } from "../types/QuantumAccount";
+import { QuantumAccountNetwork } from "../types/QuantumAccountNetwork";
 
 const ConnectionContext = createContext<{
   connect: () => void;
@@ -17,6 +20,8 @@ const ConnectionContext = createContext<{
   quantum?: any;
   error?: Error;
   account?: string;
+  quantumAccount?: QuantumAccount;
+  quantumAccountNetworks?: QuantumAccountNetwork[];
 }>({
   connect: () => {},
   disconnect: () => {},
@@ -26,7 +31,14 @@ const ConnectionContext = createContext<{
 
 export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
   const toast = useToast();
-  const quantum: any = useMemo(() => ("quantum" in window ? window.quantum : undefined), []);
+  const quantum: any = useMemo(() => {
+    if ("quantum" in window) {
+      const quantum = window.quantum as any;
+      return quantum.ethereum;
+    } else {
+      return undefined;
+    }
+  }, []);
   const [isConnected, setIsConnected] = useLocalStorage("IS_CONNECTED", false);
 
   const [connectionState, connectOrDisconnect] = useAsyncFn(
@@ -40,6 +52,22 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
   );
 
   const account = connectionState.value?.[0];
+
+  const quantumAccount = useAsync(async () => {
+    if (account) {
+      return await quantum.request({
+        method: "quantum_getAccount",
+      });
+    }
+  }, [account]);
+
+  const quantumAccountNetworks = useAsync(async () => {
+    if (account) {
+      return await quantum.request({
+        method: "quantum_getAccountNetworks",
+      });
+    }
+  }, [account]);
 
   useEffect(() => {
     if (connectionState.error) {
@@ -87,8 +115,11 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
         connect: () => connectOrDisconnect(true),
         disconnect: () => connectOrDisconnect(false),
         isConnected: !!account,
-        error: connectionState.error,
-        loading: connectionState.loading,
+        error: connectionState.error ?? quantumAccount.error ?? quantumAccountNetworks.error,
+        loading:
+          connectionState.loading || quantumAccount.loading || quantumAccountNetworks.loading,
+        quantumAccount: quantumAccount.value,
+        quantumAccountNetworks: quantumAccountNetworks.value,
         account,
         quantum,
       }}

@@ -13,9 +13,10 @@ import { javascript } from "@codemirror/lang-javascript";
 import { atomone } from "@uiw/codemirror-theme-atomone";
 import CodeMirror from "@uiw/react-codemirror";
 import { FunctionComponent, useCallback, useRef, useState } from "react";
-import { IoIosCopy, IoIosPlay, IoIosTrash, IoMdList, IoMdRefresh } from "react-icons/io";
+import { IoIosPlay, IoIosTrash, IoMdList, IoMdRefresh } from "react-icons/io";
 import { Panel, PanelGroup } from "react-resizable-panels";
 
+import { CopyIcon } from "./CopyIcon";
 import { ResizeHandle } from "./ResizeHandle";
 import { useConnection } from "../providers/ConnectionProvider";
 import { formatCode } from "../utils/formatCode";
@@ -91,7 +92,7 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
       // @ts-ignore
       iframeWindow.console = iframeConsole;
       // @ts-ignore
-      iframeWindow.ethereum = window.quantum;
+      iframeWindow.ethereum = window.quantum?.ethereum;
       // @ts-ignore
       iframeWindow.eval(
         `(async () => {${code}})()`.replace(
@@ -163,7 +164,7 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
                   colorScheme={"teal"}
                   size={"sm"}
                   title={"Copy"}
-                  icon={<IoIosCopy />}
+                  icon={<CopyIcon />}
                   onClick={onCopy}
                 />
                 <Button
@@ -232,7 +233,7 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
                   colorScheme={"teal"}
                   size={"sm"}
                   title={"Copy"}
-                  icon={<IoIosCopy />}
+                  icon={<CopyIcon />}
                   onClick={onCopyResult}
                 />
               </ButtonGroup>

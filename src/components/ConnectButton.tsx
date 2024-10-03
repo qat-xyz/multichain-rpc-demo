@@ -7,45 +7,75 @@ import {
   Link,
   Text,
   Tooltip,
-  useClipboard,
+  VStack,
 } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { AiOutlinePoweroff } from "react-icons/ai";
 
 import { AccountIcon } from "./AccountIcon";
+import { CopyAccountAddressModal } from "./CopyAccountAddressModal";
+import { CopyIcon } from "./CopyIcon";
 import ICON from "../assets/images/icon.png";
 import ICON_WHITE from "../assets/images/icon.svg";
 import { useConnection } from "../providers/ConnectionProvider";
-import { shortenAddress } from "../utils/shortenAddress";
 
 export const ConnectButton: FunctionComponent = () => {
-  const { quantum, isConnected, connect, disconnect, loading, account } = useConnection();
-  const { hasCopied, onCopy } = useClipboard(account ?? "");
+  const { quantum, isConnected, connect, disconnect, loading, quantumAccount } = useConnection();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   return quantum ? (
-    account ? (
+    quantumAccount ? (
       <HStack>
         <ButtonGroup isAttached={true}>
-          <Button
-            colorScheme={"primary"}
-            leftIcon={<AccountIcon address={account} size={"xs"} />}
-            onClick={onCopy}
-          >
-            <Tooltip label={hasCopied ? "Copied!" : "Copy Address"} fontSize={"xs"} padding={1}>
-              <Text fontSize={"sm"} fontWeight={"semibold"}>
-                {shortenAddress(account ?? "", 4)}
-              </Text>
-            </Tooltip>
-          </Button>
+          <Tooltip label={"Copy Address"} fontSize={"xs"} padding={1}>
+            <Button
+              colorScheme={"primary"}
+              height={"auto"}
+              borderRadius={"full"}
+              borderRight={"1px solid rgba(0,0,0,0.12)"}
+              paddingX={1.5}
+              paddingY={1}
+              paddingRight={4}
+              rightIcon={<CopyIcon fontSize={"16px"} marginLeft={2} />}
+              onClick={() => setIsModalOpen(true)}
+            >
+              <HStack lineHeight={1.4}>
+                <AccountIcon
+                  name={quantumAccount.name}
+                  border={"1px solid"}
+                  seed={quantumAccount.id}
+                />
+                <VStack alignItems={"flex-start"} spacing={0}>
+                  {quantumAccount.walletName && (
+                    <Text fontSize={"xs"} fontWeight={"medium"} opacity={0.7}>
+                      {quantumAccount.walletName}
+                    </Text>
+                  )}
+                  <Text
+                    isTruncated={true}
+                    textAlign={"left"}
+                    fontSize={"14px"}
+                    fontWeight={"medium"}
+                  >
+                    {quantumAccount.name}
+                  </Text>
+                </VStack>
+              </HStack>
+            </Button>
+          </Tooltip>
           <Tooltip label={"Disconnect"} fontSize={"xs"} padding={1}>
             <IconButton
               aria-label={"disconnect"}
               colorScheme={"primary"}
               variant={"outline"}
+              height={"auto"}
+              borderRadius={"38px"}
               icon={<AiOutlinePoweroff />}
               onClick={() => disconnect()}
             />
           </Tooltip>
         </ButtonGroup>
+        <CopyAccountAddressModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </HStack>
     ) : (
       <Button

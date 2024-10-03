@@ -3,14 +3,14 @@ import { FunctionComponent } from "react";
 
 export const AccountIcon: FunctionComponent<
   AvatarProps & {
-    address: string;
+    seed: string;
     name?: string;
   }
-> = ({ name, address, size = "sm", ...props }) => (
+> = ({ name, seed, size = "sm", ...props }) => (
   <Avatar
-    name={name ?? address}
+    name={name ?? seed}
     size={size}
-    src={`https://api.dicebear.com/7.x/identicon/svg?seed=${address}`}
+    src={`https://api.dicebear.com/7.x/identicon/svg?seed=${seed}`}
     color={"gray.200"}
     borderRadius={"full"}
     overflow={"hidden"}
