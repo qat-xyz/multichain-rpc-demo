@@ -6,46 +6,18 @@
   },
   "methods": [
     {
-      "name": "wallet_chainIds",
-      "tags": [
-        {
-          "$ref": "#/components/tags/Multichain"
-        },
-        {
-          "$ref": "#/components/tags/Quantum"
-        }
-      ],
-      "summary": "Return the selected account chains IDs.",
-      "result": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "examples": [
-        {
-          "name": "Get the wallet networks chain IDs",
-          "data": {
-            "id": "0",
-            "jsonrpc": "2.0",
-            "method": "wallet_chainIds"
-          }
-        }
-      ]
-    },
-    {
       "name": "wallet_watchAsset",
       "summary": "Tracks a token in Quantum.",
       "description": "Requests that the user track the specified token in Quantum. Returns a boolean indicating if the token was successfully added. Once added, the token is indistinguishable from those added using legacy methods, such as a centralized registry. Originally introduced by [EIP-747](https://eips.ethereum.org/EIPS/eip-747), however the current specification for EIP-747 has diverged from the implementation in Quantum. The implementation in Quantum, described below, matches the version of EIP-747 found here: https://github.com/ethereum/EIPs/blob/36102e0c82630e2654fd019f54914330d1c37f74/EIPS/eip-747.md. In Quantum, you have the option to specify the network to which the token will be added. If not specified, the token will be added to the default chain ID selected for the current connection.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "options": {
@@ -129,10 +101,10 @@
       "description": "Creates a confirmation asking the user to add the specified chain to the wallet application. The caller must specify a chain ID and some chain metadata. The wallet application may refuse or accept the request. `null` is returned if the chain is added, and an error otherwise. Introduced by [EIP 3085](https://eips.ethereum.org/EIPS/eip-3085).",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         }
       ],
       "params": [
@@ -199,10 +171,10 @@
       "description": "Requests that the wallet switching the default chain ID for this connection. In Quantum this will not prompt the user and you can see the network switched in the wallet Web3 tab. Introduced by [EIP 3326](https://ethereum-magicians.org/t/eip-3326-wallet-switchethereumchain).",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         }
       ],
       "params": [
@@ -248,10 +220,10 @@
       "description": "Requests additional permissions from the user. Currently no additional permissions implemented and this will be equal to the 'eth_accounts' API. Introduced by [EIP-2255](https://eips.ethereum.org/EIPS/eip-2255).",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         }
       ],
       "params": [
@@ -292,10 +264,10 @@
       "description": "Presents a plain text signature challenge to the user and returns the signed response. Equivalent to `eth_sign` on some other wallets, and prepends a safe prefix to the signed message to prevent the challenge tricking users into signing a financial transaction. This method requires that the user has granted permission to interact with their account first, so make sure to call `eth_requestAccounts` first.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         },
         {
           "$ref": "#/components/tags/Restricted"
@@ -336,10 +308,10 @@
       "summary": "Gets a list of addresses for the user's accounts.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Standard"
         },
         {
           "$ref": "#/components/tags/Restricted"
@@ -367,10 +339,10 @@
       "summary": "Returns the connection default network chain ID.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Standard"
         }
       ],
       "result": {
@@ -394,10 +366,10 @@
       "description": "Requests that the user share their public encryption key. Returns a public encryption key, or rejects if the user denies the request. The public key is computed from entropy associated with the specified user account, using the NaCl implementation of the `X25519_XSalsa20_Poly1305` algorithm.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         },
         {
           "$ref": "#/components/tags/Restricted"
@@ -432,10 +404,10 @@
       "description": "Requests that Quantum decrypt the specified encrypted message. The message must have been encrypted using the public encryption key of the specified Ethereum address. Returns a promise that resolves to the decrypted message, or rejects if the decryption attempt fails.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         },
         {
           "$ref": "#/components/tags/Restricted"
@@ -464,10 +436,10 @@
       "description": "Presents a data message for the user to sign in a structured and readable format and returns the signed response. Introduced By [EIP-712](https://eips.ethereum.org/EIPS/eip-712).",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Quantum"
+          "$ref": "#/components/tags/Standard"
         },
         {
           "$ref": "#/components/tags/Restricted"
@@ -573,16 +545,16 @@
       "summary": "Initiates a new transaction.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Restricted"
         },
         {
-          "$ref": "#/components/tags/Restricted"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -648,13 +620,13 @@
       "summary": "Returns information about a block by hash.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -702,13 +674,13 @@
       "summary": "Returns information about a block by number.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -756,13 +728,13 @@
       "summary": "Returns the number of transactions in a block from a block matching the given block hash.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -804,13 +776,13 @@
       "summary": "Returns the number of transactions in a block matching the given block number.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -851,13 +823,13 @@
       "summary": "Returns the number of uncles in a block from a block matching the given block hash.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -899,13 +871,13 @@
       "summary": "Returns the number of uncles in a block matching the given block number.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -946,13 +918,13 @@
       "summary": "Returns an object with data about the sync status or false.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -986,10 +958,10 @@
       "summary": "Returns the client coinbase address.",
       "tags": [
         {
-          "$ref": "#/components/tags/Standard"
+          "$ref": "#/components/tags/EVM"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Standard"
         }
       ],
       "result": {
@@ -1012,13 +984,13 @@
       "summary": "Returns the number of most recent block.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1052,13 +1024,13 @@
       "summary": "Executes a new message call immediately without creating a transaction on the block chain.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1082,13 +1054,13 @@
       "summary": "Generates and returns an estimate of how much gas is necessary to allow the transaction to complete.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1112,13 +1084,13 @@
       "summary": "Returns the current price per gas in wei.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1152,13 +1124,13 @@
       "summary": "Returns the current maxPriorityFeePerGas per gas in wei.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1193,13 +1165,13 @@
       "description": "Returns transaction base fee per gas and effective priority fee per gas for the requested/supported block range.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1261,13 +1233,13 @@
       "summary": "Creates a filter object, based on filter options, to notify when the state changes (logs).",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1285,13 +1257,13 @@
       "summary": "Creates a filter in the node, to notify when a new block arrives.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1304,13 +1276,13 @@
       "summary": "Creates a filter in the node, to notify when new pending transactions arrive.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1323,13 +1295,13 @@
       "summary": "Uninstalls a filter with given id.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1348,13 +1320,13 @@
       "summary": "Polling method for a filter, which returns an array of logs which occurred since last poll.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1373,13 +1345,13 @@
       "summary": "Returns an array of all logs matching filter with given id.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1398,13 +1370,13 @@
       "summary": "Returns an array of all logs matching filter with given id.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1423,13 +1395,13 @@
       "summary": "Returns whether the client is actively mining new blocks.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1442,13 +1414,13 @@
       "summary": "Returns the number of hashes per second that the node is mining with.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1461,13 +1433,13 @@
       "summary": "Returns the hash of the current block, the seedHash, and the boundary condition to be met (“target”).",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "result": {
@@ -1494,13 +1466,13 @@
       "summary": "Used for submitting a proof-of-work solution.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1530,13 +1502,13 @@
       "summary": "Used for submitting mining hashrate.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1561,13 +1533,13 @@
       "summary": "Returns the balance of the account of given address.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1613,13 +1585,13 @@
       "summary": "Returns the value from a storage position at a given address.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1648,13 +1620,13 @@
       "summary": "Returns the number of transactions sent from an address.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1702,13 +1674,13 @@
       "summary": "Returns code at a given address.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1756,13 +1728,13 @@
       "summary": "Returns the merkle proof for a given account and optionally some storage keys.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1795,13 +1767,13 @@
       "summary": "Submits a raw transaction.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1821,13 +1793,13 @@
       "summary": "Returns the information about a transaction requested by transaction hash.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1870,13 +1842,13 @@
       "summary": "Returns information about a transaction by block hash and transaction index position.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1924,13 +1896,13 @@
       "summary": "Returns information about a transaction by block number and transaction index position.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -1978,13 +1950,13 @@
       "summary": "Returns the receipt of a transaction by transaction hash.",
       "tags": [
         {
-          "$ref": "#/components/tags/Multichain"
+          "$ref": "#/components/tags/EVM"
         },
         {
           "$ref": "#/components/tags/Standard"
         },
         {
-          "$ref": "#/components/tags/Ethereum"
+          "$ref": "#/components/tags/Multichain"
         }
       ],
       "params": [
@@ -3459,6 +3431,16 @@
       }
     },
     "tags": {
+      "EVM": {
+        "name": "EVM",
+        "description": "Ethereum compatible network RPC method.",
+        "color": "blue"
+      },
+      "SVM": {
+        "name": "SVM",
+        "description": "Solana compatible network RPC method.",
+        "color": "teal"
+      },
       "Multichain": {
         "name": "Multichain",
         "description": "This method is part of a new, innovative standard that offers Web3 applications an API empowering developers to construct a highly intuitive and user-friendly multi-chain user experience by targeting a specific user network or chain ID.",
@@ -3469,11 +3451,6 @@
         "description": "This method can be found in the majority of existing wallets, serving as a standardized interface that ensures compatibility and ease of integration across various wallet implementations.",
         "color": "green"
       },
-      "Ethereum": {
-        "name": "Ethereum",
-        "description": "Standard ethereum node RPC method.",
-        "color": "blue"
-      },
       "Quantum": {
         "name": "Quantum",
         "description": "Quantum-specific RPC method.",
@@ -3481,7 +3458,7 @@
       },
       "Restricted": {
         "name": "Restricted",
-        "description": "The caller must have the corresponding permission via `wallet_requestPermissions` in order to invoke this method.",
+        "description": "The caller must have the corresponding permission in order to invoke this method.",
         "color": "red"
       }
     }

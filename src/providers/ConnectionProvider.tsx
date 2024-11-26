@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { PublicKey } from "@solana/web3.js";
 import {
   createContext,
   FunctionComponent,
@@ -33,41 +34,94 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
   const toast = useToast();
   const quantum: any = useMemo(() => {
     if ("quantum" in window) {
-      const quantum = window.quantum as any;
-      return quantum.ethereum;
+      return window.quantum as any;
     } else {
       return undefined;
     }
   }, []);
+
   const [isConnected, setIsConnected] = useLocalStorage("IS_CONNECTED", false);
 
   const [connectionState, connectOrDisconnect] = useAsyncFn(
-    async isConnect =>
-      isConnect
-        ? await quantum.request({
+    async isConnect => {
+      const errors = [];
+      const addresses = {
+        EVM: "",
+        SVM: "",
+      };
+      if (quantum && isConnect) {
+        try {
+          const ethAddress = await quantum.ethereum.request({
             method: "eth_requestAccounts",
-          })
-        : [],
+          });
+          addresses.EVM = ethAddress[0];
+        } catch (e) {
+          errors.push(e);
+        }
+        try {
+          const svmAddress: PublicKey = await quantum.solana.connect();
+          addresses.SVM = svmAddress.toBase58();
+        } catch (e) {
+          errors.push(e);
+        }
+        if (!addresses.EVM && !addresses.SVM)
+          throw new Error("Connection Failed!\n" + errors.map((e: any) => e.message).join("\n"));
+      }
+      return addresses;
+    },
     [quantum],
   );
 
-  const account = connectionState.value?.[0];
-
   const quantumAccount = useAsync(async () => {
-    if (account) {
-      return await quantum.request({
-        method: "quantum_getAccount",
-      });
+    if (quantum && connectionState.value) {
+      if (connectionState.value.EVM) {
+        try {
+          const accountInfo = await quantum.ethereum.request({
+            method: "quantum_getAccount",
+          });
+          return {
+            ...accountInfo,
+            addresses: connectionState.value,
+          };
+        } catch {}
+      }
+      if (connectionState.value.SVM) {
+        try {
+          const accountInfo = await quantum.solana.request({
+            method: "quantum_getAccount",
+          });
+          return {
+            ...accountInfo,
+            addresses: connectionState.value,
+          };
+        } catch {}
+      }
+      return;
     }
-  }, [account]);
+  }, [connectionState.value, quantum]);
 
   const quantumAccountNetworks = useAsync(async () => {
-    if (account) {
-      return await quantum.request({
-        method: "quantum_getAccountNetworks",
-      });
+    const networks = [];
+    if (quantum && connectionState.value) {
+      if (connectionState.value.EVM) {
+        try {
+          const evmNetworks = await quantum.ethereum.request({
+            method: "quantum_getAccountNetworks",
+          });
+          networks.push(...evmNetworks);
+        } catch {}
+      }
+      if (connectionState.value.SVM) {
+        try {
+          const svmNetworks = await quantum.solana.request({
+            method: "quantum_getAccountNetworks",
+          });
+          networks.push(...svmNetworks);
+        } catch {}
+      }
     }
-  }, [account]);
+    return networks;
+  }, [connectionState.value, quantum]);
 
   useEffect(() => {
     if (connectionState.error) {
@@ -84,22 +138,32 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
 
   useEffect(() => {
     const onAccountChanged = (accounts: string[]) => {
-      if (accounts?.[0] !== account) {
-        void connectOrDisconnect(!!accounts?.[0]);
+      if (isConnected && accounts?.[0] !== connectionState.value?.EVM) {
+        void connectOrDisconnect(true);
       }
     };
-    quantum?.on("accountsChanged", onAccountChanged);
-    return () => quantum?.off("accountsChanged", onAccountChanged);
-  }, [account, connectOrDisconnect, connectionState.value, quantum]);
+    quantum?.ethereum.on("accountsChanged", onAccountChanged);
+    return () => quantum?.ethereum.off("accountsChanged", onAccountChanged);
+  }, [connectOrDisconnect, connectionState.value, isConnected, quantum]);
+
+  useEffect(() => {
+    const onAccountChanged = (account: PublicKey) => {
+      if (isConnected && account?.toBase58() !== connectionState.value?.SVM) {
+        void connectOrDisconnect(true);
+      }
+    };
+    quantum?.solana.on("accountChanged", onAccountChanged);
+    return () => quantum?.solana.off("accountChanged", onAccountChanged);
+  }, [connectOrDisconnect, connectionState.value, isConnected, quantum]);
 
   // save the connection state for eager connection
   useEffect(() => {
-    if (account) {
+    if (quantumAccount.value) {
       setIsConnected(true);
     } else {
       setIsConnected(false);
     }
-  }, [account, setIsConnected]);
+  }, [quantumAccount.value, setIsConnected]);
 
   // eager connection
   useEffect(() => {
@@ -114,13 +178,13 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
       value={{
         connect: () => connectOrDisconnect(true),
         disconnect: () => connectOrDisconnect(false),
-        isConnected: !!account,
+        isConnected: !!quantumAccount.value,
         error: connectionState.error ?? quantumAccount.error ?? quantumAccountNetworks.error,
         loading:
           connectionState.loading || quantumAccount.loading || quantumAccountNetworks.loading,
         quantumAccount: quantumAccount.value,
         quantumAccountNetworks: quantumAccountNetworks.value,
-        account,
+        account: quantumAccount.value,
         quantum,
       }}
     >
