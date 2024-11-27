@@ -342,6 +342,38 @@
       ]
     },
     {
+      "name": "personal_ecRecover",
+      "summary": "Recover the signer address from a message signature.",
+      "description": "Returns the address associated with the private key that was used to calculate the signature in personal_sign.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/EVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "params": [
+        {
+          "type": "string",
+          "required": true,
+          "description": "The message to recover from."
+        },
+        {
+          "type": "string",
+          "required": true,
+          "description": "The message signature returned from personal_sign."
+        }
+      ],
+      "result": {
+        "$ref": "#/components/schemas/address",
+        "description": "The address of the message signer."
+      }
+    },
+    {
       "name": "eth_requestAccounts",
       "summary": "Requests that the user provide an Ethereum address.",
       "description": "Requests that the user provide an Ethereum address to be identified by. This method is specified by [EIP-1102](https://eips.ethereum.org/EIPS/eip-1102). Internally, this method calls `wallet_requestPermissions` for permission to call `eth_accounts`.",
