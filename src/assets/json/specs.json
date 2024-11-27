@@ -259,6 +259,45 @@
       ]
     },
     {
+      "name": "wallet_revokePermissions",
+      "summary": "Revokes the current dapp permissions.",
+      "description": "Revokes previously granted permissions for the current dapp identified by its origin. This method is specified by [MIP-2](https://github.com/MetaMask/metamask-improvement-proposals/blob/main/MIPs/mip-2.md) and is only available for the browser extension.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/EVM"
+        }
+      ],
+      "params": [
+        {
+          "type": "object",
+          "properties": {
+            "eth_accounts": {
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "result": {
+        "type": "null",
+        "description": "Revoke permissions result."
+      },
+      "examples": [
+        {
+          "name": "Request the wallet to revoke permissions",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "wallet_revokePermissions",
+            "params": [
+              {
+                "eth_accounts": {}
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "personal_sign",
       "summary": "Presents a plain text signature challenge to the user.",
       "description": "Presents a plain text signature challenge to the user and returns the signed response. Equivalent to `eth_sign` on some other wallets, and prepends a safe prefix to the signed message to prevent the challenge tricking users into signing a financial transaction. This method requires that the user has granted permission to interact with their account first, so make sure to call `eth_requestAccounts` first.",
