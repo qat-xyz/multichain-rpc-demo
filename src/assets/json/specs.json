@@ -6,6 +6,84 @@
   },
   "methods": [
     {
+      "name": "quantum_getAccount",
+      "summary": "Retrieve the basic account information from Quantum Wallet for the specified network type.",
+      "description": "Retrieve basic account information from Quantum Wallet for the specified network type, including account id, name, wallet name, and address. The account id can also be used to generate a unique avatar photo, enabling a unified experience for multi-blockchain connections.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/Restricted"
+        },
+        {
+          "$ref": "#/components/tags/Quantum"
+        }
+      ],
+      "result": {
+        "$ref": "#/components/schemas/QuantumAccount"
+      },
+      "examples": [
+        {
+          "name": "Get the Quantum Wallet account basic info.",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "quantum_getAccount"
+          }
+        }
+      ]
+    },
+    {
+      "name": "quantum_getAccountNetworks",
+      "summary": "Retrieve the account available networks.",
+      "description": "Retrieve the account available networks for the specified network type, including network name, network type, chain Id, color, is test, native currency info and the explorers info. This will help multi-chain web3 apps to build a better user experience.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/Restricted"
+        },
+        {
+          "$ref": "#/components/tags/Quantum"
+        }
+      ],
+      "result": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/QuantumNetwork"
+        }
+      },
+      "examples": [
+        {
+          "name": "Get the account available networks.",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "quantum_getAccountNetworks"
+          }
+        }
+      ]
+    },
+    {
+      "name": "quantum_getProviderState",
+      "summary": "Retrieve the Quantum Provider state.",
+      "description": "Retrieve the Quantum Provider state. This method is used internally by the injected Quantum Provider.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/Quantum"
+        }
+      ],
+      "result": {
+        "$ref": "#/components/schemas/QuantumProviderState"
+      },
+      "examples": [
+        {
+          "name": "Get the Quantum Provider state.",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "quantum_getProviderState"
+          }
+        }
+      ]
+    },
+    {
       "name": "wallet_watchAsset",
       "summary": "Tracks a token in Quantum.",
       "description": "Requests that the user track the specified token in Quantum. Returns a boolean indicating if the token was successfully added. Once added, the token is indistinguishable from those added using legacy methods, such as a centralized registry. Originally introduced by [EIP-747](https://eips.ethereum.org/EIPS/eip-747), however the current specification for EIP-747 has diverged from the implementation in Quantum. The implementation in Quantum, described below, matches the version of EIP-747 found here: https://github.com/ethereum/EIPs/blob/36102e0c82630e2654fd019f54914330d1c37f74/EIPS/eip-747.md. In Quantum, you have the option to specify the network to which the token will be added. If not specified, the token will be added to the default chain ID selected for the current connection.",
@@ -3550,6 +3628,119 @@
             "type": {
               "anyOf": ["string", "number"]
             }
+          }
+        }
+      },
+      "QuantumAccount": {
+        "type": "object",
+        "description": "Quantum account basic info.",
+        "properties": {
+          "id": {
+            "description": "A random generated account id.",
+            "type": "string"
+          },
+          "name": {
+            "description": "The account name.",
+            "type": "string"
+          },
+          "walletName": {
+            "description": "The account wallet name.",
+            "type": "string"
+          },
+          "address": {
+            "description": "The account address.",
+            "type": "string"
+          }
+        }
+      },
+      "QuantumNetwork": {
+        "type": "object",
+        "description": "The network details.",
+        "properties": {
+          "name": {
+            "description": "The network name.",
+            "type": "string"
+          },
+          "networkType": {
+            "description": "The network type. e.g EVM.",
+            "type": "string"
+          },
+          "chainId": {
+            "description": "The network chain id.",
+            "type": "number"
+          },
+          "color": {
+            "description": "The network color. the color is auto generated from the network icon.",
+            "type": "string"
+          },
+          "isTest": {
+            "description": "Determine whether the network is a test network.",
+            "type": "boolean"
+          },
+          "nativeCurrency": {
+            "description": "The network native currency details.",
+            "type": "object",
+            "properties": {
+              "symbol": {
+                "description": "The currency symbol.",
+                "type": "string"
+              },
+              "decimals": {
+                "description": "The currency decimals.",
+                "type": "number"
+              },
+              "name": {
+                "description": "The currency name.",
+                "type": "string"
+              }
+            }
+          },
+          "explorers": {
+            "description": "The network explorers details.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "description": "The network explorer name. e.g etherscan.",
+                  "type": "string"
+                },
+                "url": {
+                  "description": "The network explorer base url. e.g https://etherscan.io.",
+                  "type": "string"
+                },
+                "icon": {
+                  "description": "The network explorer icon if available.",
+                  "type": "string"
+                },
+                "standard": {
+                  "description": "The network explorer standard if available. e.g EIP3091.",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "QuantumProviderState": {
+        "type": "object",
+        "description": "Quantum provider state.",
+        "properties": {
+          "isUnlocked": {
+            "description": "Determine whether the Quantum Wallet is unlocked.",
+            "type": "boolean"
+          },
+          "chainId": {
+            "description": "The provider default network chain Id.",
+            "type": "string"
+          },
+          "networkVersion": {
+            "description": "The provider RPC network version.",
+            "type": "string"
+          },
+          "account": {
+            "description": "The selected account address.",
+            "type": "string"
           }
         }
       }
