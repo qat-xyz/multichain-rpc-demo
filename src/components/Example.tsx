@@ -21,12 +21,16 @@ import { ResizeHandle } from "./ResizeHandle";
 import { useConnection } from "../providers/ConnectionProvider";
 import { formatCode } from "../utils/formatCode";
 
-export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
+export const Example: FunctionComponent<{ example: any; networkType: string }> = ({
+  example,
+  networkType,
+}) => {
   const { account } = useConnection();
+  const providerName = networkType === "SVM" ? "solana" : "ethereum";
   const defaultCode = formatCode(
     `// ${example.name}
       try {
-        const result = await window.ethereum.request(${JSON.stringify(example.data)});
+        const result = await window.${providerName}.request(${JSON.stringify(example.data)});
         console.log(result);
       } catch(e){
         console.error(e)
@@ -93,6 +97,8 @@ export const Example: FunctionComponent<{ example: any }> = ({ example }) => {
       iframeWindow.console = iframeConsole;
       // @ts-ignore
       iframeWindow.ethereum = window.quantum?.ethereum;
+      // @ts-ignore
+      iframeWindow.solana = window.quantum?.solana;
       // @ts-ignore
       iframeWindow.eval(
         `(async () => {${code}})()`.replace(

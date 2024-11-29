@@ -26,6 +26,7 @@ export const DocumentationMethod: FunctionComponent<{
   method: {
     id: string;
     name: string;
+    networkType?: string;
     summary?: string;
     description?: string;
     tags?: any[];
@@ -177,7 +178,7 @@ export const DocumentationMethod: FunctionComponent<{
                         paddingBottom={2}
                         backgroundColor={"primary.500"}
                       >
-                        <Example example={example} />
+                        <Example example={example} networkType={method.networkType ?? "EVM"} />
                       </AccordionPanel>
                     </AccordionItem>
                   ))}

@@ -59,8 +59,8 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
           errors.push(e);
         }
         try {
-          const svmAddress: PublicKey = await quantum.solana.connect();
-          addresses.SVM = svmAddress.toBase58();
+          const svmAddress: { publicKey: PublicKey } = await quantum.solana.connect();
+          addresses.SVM = svmAddress.publicKey.toBase58();
         } catch (e) {
           errors.push(e);
         }
