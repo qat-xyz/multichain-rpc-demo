@@ -30,6 +30,7 @@ export const Example: FunctionComponent<{ example: any; networkType: string }> =
   const defaultCode = formatCode(
     `// ${example.name}
       try {
+        ${example.prefix ?? ""}
         const result = await window.${providerName}.request(${JSON.stringify(example.data)});
         console.log(result);
       } catch(e){
@@ -86,7 +87,7 @@ export const Example: FunctionComponent<{ example: any; networkType: string }> =
                   formatCode(JSON.stringify(arg, null, 2), {
                     semi: false,
                   })
-                    .trim()
+                    ?.trim()
                     .replace(/^;/gm, ""),
                 )
                 .join(" ")}\n`,
@@ -101,10 +102,10 @@ export const Example: FunctionComponent<{ example: any; networkType: string }> =
       iframeWindow.solana = window.quantum?.solana;
       // @ts-ignore
       iframeWindow.eval(
-        `(async () => {${code}})()`.replace(
-          /\[\[account]]/gi,
-          account ?? "0x0000000000000000000000000000000000000000",
-        ),
+        `(async () => {${code}})()`
+          .replace(/\[\[account]]/gi, account ?? "0x0000000000000000000000000000000000000000")
+          .replaceAll('"[[', "")
+          .replaceAll(']]"', ""),
       );
     }
   }, [account, code]);
@@ -185,10 +186,10 @@ export const Example: FunctionComponent<{ example: any; networkType: string }> =
               </ButtonGroup>
             </HStack>
             <CodeMirror
-              value={code.replace(
-                /\[\[account]]/gi,
-                account ?? "0x0000000000000000000000000000000000000000",
-              )}
+              value={code
+                .replace(/\[\[account]]/gi, account ?? "0x0000000000000000000000000000000000000000")
+                .replaceAll('"[[', "")
+                .replaceAll(']]"', "")}
               theme={atomone}
               height={"100%"}
               maxHeight={"500px"}

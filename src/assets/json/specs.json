@@ -87,7 +87,7 @@
       "name": "connect",
       "networkType": "SVM",
       "summary": "Requests that the user provide a Solana public key.",
-      "description": "Requests that the user provide a Solana public key to be identified by. Internally, this method calls `sol_connect`.",
+      "description": "Requests that the user provide a Solana public key to be identified by, once the public provided a `connect` event will be emitted. Internally, this method calls `sol_connect`.",
       "tags": [
         {
           "$ref": "#/components/tags/SVM"
@@ -96,9 +96,6 @@
           "$ref": "#/components/tags/Standard"
         }
       ],
-      "options": {
-        "$ref": "#/components/schemas/MethodOptions"
-      },
       "params": {
         "onlyIfTrusted": {
           "type": "boolean",
@@ -107,11 +104,11 @@
       },
       "result": {
         "type": "Object",
-        "description": "An object contains the user public key.",
+        "description": "An object that includes the user's public key.",
         "properties": {
           "publicKey": {
             "type": "PublicKey",
-            "description": "The user public key."
+            "description": "The user's public key."
           }
         }
       },
@@ -132,6 +129,231 @@
             "method": "connect",
             "params": {
               "onlyIfTrusted": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "disconnect",
+      "networkType": "SVM",
+      "summary": "Disconnect the provider.",
+      "description": "Disconnect the provider and emit the `disconnect` event. It is also possible for the wallet to initiate the disconnection, rather than the webapp itself.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/SVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        }
+      ]
+    },
+    {
+      "name": "signAndSendTransaction",
+      "networkType": "SVM",
+      "summary": "Sign and send a transaction.",
+      "description": "Sign and send a transaction. You can also specify a `SendOptions` object as a second argument. Internally, this method calls `sol_signAndSendTransaction`",
+      "tags": [
+        {
+          "$ref": "#/components/tags/SVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "options": {
+        "$ref": "#/components/schemas/MethodOptions"
+      },
+      "params": {
+        "message": {
+          "type": "string",
+          "description": "The serialized transaction message in the Base58 encoding format."
+        },
+        "options": {
+          "type": "object",
+          "description": "An optional send transaction options object.",
+          "properties": {
+            "skipPreflight": {
+              "type": "boolean",
+              "description": "Disable transaction verification step."
+            },
+            "preflightCommitment": {
+              "type": "string",
+              "description": "Preflight commitment leve.",
+              "enum": [
+                "processed",
+                "confirmed",
+                "finalized",
+                "recent",
+                "single",
+                "singleGossip",
+                "root",
+                "max"
+              ]
+            },
+            "maxRetries": {
+              "type": "number",
+              "description": "Maximum number of times for the RPC node to retry sending the transaction to the leader."
+            },
+            "minContextSlot": {
+              "type": "number",
+              "description": "The minimum slot that the request can be evaluated at."
+            }
+          }
+        }
+      },
+      "result": {
+        "type": "object",
+        "description": "An object that includes the transaction signature.",
+        "properties": {
+          "signature": {
+            "type": "string",
+            "description": "The transaction signature."
+          }
+        }
+      }
+    },
+    {
+      "name": "signTransaction",
+      "networkType": "SVM",
+      "summary": "Sign a transaction.",
+      "description": "Sign a transaction. Internally, this method calls `sol_signTransaction`.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/SVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "params": {
+        "message": {
+          "type": "string",
+          "description": "The serialized transaction message in the Base58 encoding format."
+        }
+      },
+      "result": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "Transaction",
+              "description": "Legacy Transaction"
+            },
+            {
+              "type": "VersionedTransaction",
+              "description": "Versioned Transaction"
+            }
+          ]
+        },
+        "description": "The signed transaction, with its type depending on the originally submitted transaction."
+      }
+    },
+    {
+      "name": "signAllTransactions",
+      "networkType": "SVM",
+      "summary": "Signing multiple transactions.",
+      "description": "Signing multiple transactions. This method is not recommended for new integrations.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/SVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "options": {
+        "$ref": "#/components/schemas/MethodOptions"
+      },
+      "params": {
+        "messages": {
+          "type": "array",
+          "description": "An array of serialized transaction messages in Base58 encoding format.",
+          "items": {
+            "type": "string",
+            "description": "The serialized transaction message in the Base58 encoding format."
+          }
+        }
+      },
+      "result": {
+        "type": "array",
+        "description": "Signed transactions, with their types depending on the originally submitted transactions.",
+        "items": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "Transaction",
+                "description": "Legacy Transaction"
+              },
+              {
+                "type": "VersionedTransaction",
+                "description": "Versioned Transaction"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "signMessage",
+      "networkType": "SVM",
+      "summary": "Sign message.",
+      "description": "Request that the user signs a given message. Message signatures do not involve network fees and are a convenient way for apps to verify ownership of an address. Internally this method calls `sol_signMessage`.",
+      "tags": [
+        {
+          "$ref": "#/components/tags/SVM"
+        },
+        {
+          "$ref": "#/components/tags/Standard"
+        },
+        {
+          "$ref": "#/components/tags/Restricted"
+        }
+      ],
+      "params": {
+        "message": {
+          "type": "string",
+          "description": "The encoded message, represented as a hex or UTF-8 encoded string in a Uint8Array."
+        },
+        "display": {
+          "type": "string",
+          "description": "An optional parameter specifying the encoded message format, which defaults to `utf8`.",
+          "enum": ["utf8", "hex"]
+        }
+      },
+      "result": {
+        "type": "object",
+        "description": "An object that includes the signed message signature and the signer's public key.",
+        "properties": {
+          "signature": {
+            "type": "Uint8Array",
+            "description": "The signed message signature."
+          },
+          "publicKey": {
+            "type": "publicKey",
+            "description": "The signer's public key."
+          }
+        }
+      },
+      "examples": [
+        {
+          "name": "Sign message.",
+          "prefix": "const message = new TextEncoder().encode('Hello Quantum!');",
+          "data": {
+            "id": "0",
+            "jsonrpc": "2.0",
+            "method": "signMessage",
+            "params": {
+              "message": "[[message]]",
+              "display": "utf8"
             }
           }
         }

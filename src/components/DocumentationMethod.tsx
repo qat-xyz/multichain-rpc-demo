@@ -110,6 +110,9 @@ export const DocumentationMethod: FunctionComponent<{
                 displayObjectSize={false}
                 enableClipboard={false}
                 src={method.options}
+                style={{
+                  whiteSpace: "nowrap",
+                }}
               />
             </VStack>
           )}
@@ -123,6 +126,9 @@ export const DocumentationMethod: FunctionComponent<{
                 displayObjectSize={false}
                 enableClipboard={false}
                 src={method.params}
+                style={{
+                  whiteSpace: "nowrap",
+                }}
               />
             </VStack>
           )}
@@ -136,6 +142,9 @@ export const DocumentationMethod: FunctionComponent<{
                 displayObjectSize={false}
                 enableClipboard={false}
                 src={method.result}
+                style={{
+                  whiteSpace: "nowrap",
+                }}
               />
             </VStack>
           )}
@@ -149,6 +158,9 @@ export const DocumentationMethod: FunctionComponent<{
                 displayObjectSize={false}
                 enableClipboard={false}
                 src={method.errors}
+                style={{
+                  whiteSpace: "nowrap",
+                }}
               />
             </VStack>
           )}
