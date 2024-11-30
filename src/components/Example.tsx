@@ -25,7 +25,8 @@ export const Example: FunctionComponent<{ example: any; networkType: string }> =
   example,
   networkType,
 }) => {
-  const { account } = useConnection();
+  const { quantumAccount } = useConnection();
+  const account = quantumAccount?.addresses[networkType ?? "EVM"];
   const providerName = networkType === "SVM" ? "solana" : "ethereum";
   const defaultCode = formatCode(
     `// ${example.name}

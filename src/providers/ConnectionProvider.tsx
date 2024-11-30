@@ -20,7 +20,6 @@ const ConnectionContext = createContext<{
   loading: boolean;
   quantum?: any;
   error?: Error;
-  account?: string;
   quantumAccount?: QuantumAccount;
   quantumAccountNetworks?: QuantumAccountNetwork[];
 }>({
@@ -184,7 +183,6 @@ export const ConnectionProvider: FunctionComponent<PropsWithChildren> = ({ child
           connectionState.loading || quantumAccount.loading || quantumAccountNetworks.loading,
         quantumAccount: quantumAccount.value,
         quantumAccountNetworks: quantumAccountNetworks.value,
-        account: quantumAccount.value,
         quantum,
       }}
     >
