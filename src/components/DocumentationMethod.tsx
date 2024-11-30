@@ -42,8 +42,12 @@ export const DocumentationMethod: FunctionComponent<{
     <>
       <AccordionButton
         as={NavLink}
-        to={`#${method.id}`}
-        className={location.hash === `#${method.id}` ? "active-hash" : ""}
+        to={`#${method.networkType ? `${method.networkType}_` : ""}${method.id}`}
+        className={
+          location.hash === `#${method.networkType ? `${method.networkType}_` : ""}${method.id}`
+            ? "active-hash"
+            : ""
+        }
         position={"relative"}
         minWidth={0}
         css={{

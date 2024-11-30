@@ -4,6 +4,23 @@
     "title": "Quantum JSON-RPC API Reference",
     "version": "3.0.0"
   },
+  "networkTypes": {
+    "QUANTUM": {
+      "id": "QUANTUM",
+      "name": "Quantum Wallet-Specific RPC Methods",
+      "description": "A set of RPC methods supported by Quantum Wallet to enhance the multi-blockchain user experience within web applications."
+    },
+    "EVM": {
+      "id": "EVM",
+      "name": "EVM (Ethereum-Compatible Networks) RPC Methods",
+      "description": "RPC methods specifically designed for Ethereum-compatible networks (EVM), enabling seamless interaction with decentralized applications (dApps) and smart contracts across various blockchain networks that follow the Ethereum Virtual Machine standard."
+    },
+    "SVM": {
+      "id": "SVM",
+      "name": "SVM (Solana-Compatible Networks) RPC Methods",
+      "description": "RPC methods tailored for Solana-compatible networks (SVM), enabling efficient interaction with decentralized applications (dApps) and programs on blockchains that utilize the Solana Virtual Machine architecture."
+    }
+  },
   "methods": [
     {
       "name": "quantum_getAccount",
